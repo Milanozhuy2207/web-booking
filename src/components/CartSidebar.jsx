@@ -19,7 +19,7 @@ const CartSidebar = () => {
         
         // Header
         doc.setFontSize(22);
-        doc.setTextColor(0, 166, 36); // Vén Khéo Green
+        doc.setTextColor(220, 38, 38); // Vén Khéo Green
         doc.text("VÉN KHÉO", 105, 20, { align: "center" });
         
         doc.setFontSize(14);
@@ -49,7 +49,7 @@ const CartSidebar = () => {
             head: [tableColumn],
             body: tableRows,
             theme: 'grid',
-            headStyles: { fillColor: [0, 166, 36], textColor: [255, 255, 255], fontStyle: 'bold' },
+            headStyles: { fillColor: [220, 38, 38], textColor: [255, 255, 255], fontStyle: 'bold' },
             styles: { fontSize: 9, cellPadding: 3 },
             columnStyles: {
                 0: { halign: 'center', cellWidth: 15 },
@@ -74,7 +74,7 @@ const CartSidebar = () => {
         
         doc.setFontSize(12);
         doc.setFont(undefined, 'bold');
-        doc.setTextColor(0, 166, 36);
+        doc.setTextColor(220, 38, 38);
         doc.text("TỔNG CỘNG:", summaryX, finalY + 16);
         doc.text(grandTotal.toLocaleString('vi-VN') + " VND", 200, finalY + 16, { align: "right" });
         
@@ -125,7 +125,7 @@ const CartSidebar = () => {
                         cartItems.map(item => (
                             <div key={item.id} className="flex justify-between items-center bg-theme-secondary p-4 rounded-xl border border-theme transition-colors">
                                 <div className="flex-1 pr-4">
-                                    <span className="text-[#00a624] text-[10px] font-bold uppercase tracking-wider">{item.platform}</span>
+                                    <span className="text-[#E10600] text-[10px] font-bold uppercase tracking-wider">{item.platform}</span>
                                     <h4 className="text-theme-primary font-bold text-sm line-clamp-1">{item.name}</h4>
                                     <p className="text-theme-muted text-xs mt-1">{formatMoney(item.price)}</p>
                                 </div>
@@ -153,13 +153,13 @@ const CartSidebar = () => {
                             </div>
                             <div className="flex justify-between text-theme-primary font-black text-xl pt-4 border-t border-theme">
                                 <span>TỔNG CỘNG</span>
-                                <span className="text-[#00a624]">{formatMoney(grandTotal)}</span>
+                                <span className="text-[#E10600]">{formatMoney(grandTotal)}</span>
                             </div>
                         </div>
 
                         <button 
                             onClick={generatePDF}
-                            className="w-full bg-[#00a624] hover:bg-green-600 text-white font-black py-4 rounded-xl uppercase tracking-[0.1em] transition-all shadow-lg shadow-[#00a624]/20 active:scale-95 cursor-pointer"
+                            className="w-full bg-[#E10600] hover:bg-red-700 text-white font-black py-4 rounded-xl uppercase tracking-[0.1em] transition-all shadow-lg shadow-[#E10600]/20 active:scale-95 cursor-pointer"
                         >
                             Tải Xuống Báo Giá
                         </button>

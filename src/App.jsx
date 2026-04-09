@@ -1,21 +1,26 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import HeroStats from './components/HeroStats';
-import FilterBar from './components/FilterBar';
-import Marketplace from './components/Marketingplace';
 import CartSidebar from './components/CartSidebar';
 import { CartProvider } from './components/CartContext';
+import HomePage from './pages/HomePage';
+import PromotionPage from './pages/PromotionPage';
+import ServicePage from './pages/ServicePage';
 
 function App() {
   return (
     <CartProvider>
-      <div className="min-h-screen bg-theme-primary pb-20 relative overflow-hidden transition-colors duration-300">
-        <Navbar />
-        <HeroStats />
-        <FilterBar />
-        <Marketplace />
-        <CartSidebar />
-      </div>
+      <Router>
+        <div className="min-h-screen relative overflow-hidden transition-colors duration-300">
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/promotions" element={<PromotionPage />} />
+            <Route path="/services" element={<ServicePage />} />
+          </Routes>
+          <CartSidebar />
+        </div>
+      </Router>
     </CartProvider>
   );
 }

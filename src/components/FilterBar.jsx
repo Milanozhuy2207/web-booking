@@ -27,7 +27,7 @@ const FilterBar = () => {
                             placeholder="Tìm kiếm kênh, KOLs..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full bg-theme-secondary border border-theme text-theme-primary text-xs font-bold py-2.5 pl-10 pr-4 rounded-xl focus:outline-none focus:border-[#00a624] transition-colors placeholder:text-theme-muted/50"
+                            className="w-full bg-theme-secondary border border-theme text-theme-primary text-xs font-bold py-2.5 pl-10 pr-4 rounded-xl focus:outline-none focus:border-[#E10600] transition-colors placeholder:text-theme-muted/50"
                         />
                     </div>
 
@@ -37,7 +37,7 @@ const FilterBar = () => {
                             <select 
                                 value={selectedCategory}
                                 onChange={(e) => setSelectedCategory(e.target.value)}
-                                className="w-full appearance-none bg-theme-secondary text-theme-primary text-xs font-bold py-2.5 pl-4 pr-10 rounded-xl border border-theme focus:border-[#00a624] outline-none cursor-pointer uppercase tracking-wider transition-colors"
+                                className="w-full appearance-none bg-theme-secondary text-theme-primary text-xs font-bold py-2.5 pl-4 pr-10 rounded-xl border border-theme focus:border-[#E10600] outline-none cursor-pointer uppercase tracking-wider transition-colors"
                             >
                                 {categories.map(c => <option key={c} value={c}>{c === 'All' ? 'CHỦ ĐỀ' : c}</option>)}
                             </select>
@@ -49,7 +49,7 @@ const FilterBar = () => {
                             <select 
                                 value={followerRange}
                                 onChange={(e) => setFollowerRange(e.target.value)}
-                                className="w-full appearance-none bg-theme-secondary text-theme-primary text-xs font-bold py-2.5 pl-4 pr-10 rounded-xl border border-theme focus:border-[#00a624] outline-none cursor-pointer uppercase tracking-wider transition-colors"
+                                className="w-full appearance-none bg-theme-secondary text-theme-primary text-xs font-bold py-2.5 pl-4 pr-10 rounded-xl border border-theme focus:border-[#E10600] outline-none cursor-pointer uppercase tracking-wider transition-colors"
                             >
                                 {followerOptions.map(f => <option key={f} value={f}>{f === 'All' ? 'FOLLOWERS' : f}</option>)}
                             </select>
@@ -61,7 +61,7 @@ const FilterBar = () => {
                             <select 
                                 value={budgetRange}
                                 onChange={(e) => setBudgetRange(e.target.value)}
-                                className="w-full appearance-none bg-theme-secondary text-theme-primary text-xs font-bold py-2.5 pl-4 pr-10 rounded-xl border border-theme focus:border-[#00a624] outline-none cursor-pointer uppercase tracking-wider transition-colors"
+                                className="w-full appearance-none bg-theme-secondary text-theme-primary text-xs font-bold py-2.5 pl-4 pr-10 rounded-xl border border-theme focus:border-[#E10600] outline-none cursor-pointer uppercase tracking-wider transition-colors"
                             >
                                 {budgetOptions.map(b => <option key={b} value={b}>{b === 'All' ? 'BUDGET' : b}</option>)}
                             </select>
@@ -75,7 +75,7 @@ const FilterBar = () => {
                         Hiển thị <span className="text-theme-primary font-black">{filteredData.length}</span> kết quả
                     </div>
 
-                    <button className="flex items-center gap-2 bg-[#00a624] hover:bg-green-600 text-white px-5 py-2.5 rounded-xl font-black text-xs transition-all uppercase tracking-wider shadow-lg shadow-[#00a624]/20 active:scale-95">
+                    <button className="flex items-center gap-2 bg-[#E10600] hover:bg-red-700 text-white px-5 py-2.5 rounded-xl font-black text-xs transition-all uppercase tracking-wider shadow-lg shadow-[#E10600]/20 active:scale-95">
                         <FiFilter size={14} />
                         LỌC NÂNG CAO
                     </button>

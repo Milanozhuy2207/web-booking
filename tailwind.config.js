@@ -7,6 +7,9 @@ export default {
     ],
     theme: {
         extend: {
+            fontFamily: {
+                sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+            },
             colors: {
                 theme: {
                     primary: 'var(--bg-primary)',
