@@ -15,7 +15,7 @@ const Marketplace = () => {
                         <h2 className="text-theme-primary text-2xl md:text-3xl font-black uppercase tracking-tight">
                             DANH SÁCH HỆ THỐNG <span className="text-[#E10600]">.</span>
                         </h2>
-                        <p className="text-theme-muted text-[10px] md:text-xs font-black uppercase tracking-[0.2em] mt-1 opacity-60">
+                        <p className="text-theme-primary text-[10px] md:text-xs font-black uppercase tracking-[0.2em] mt-1 opacity-60">
                             Khám phá các kênh social chất lượng từ Vén Khéo
                         </p>
                     </div>
@@ -31,7 +31,7 @@ const Marketplace = () => {
 
             {filteredData.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-20 bg-theme-card rounded-3xl border border-theme shadow-lg">
-                    <p className="text-theme-muted text-lg font-medium">Không tìm thấy kết quả phù hợp</p>
+                    <p className="text-theme-primary text-lg font-medium">Không tìm thấy kết quả phù hợp</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
@@ -66,7 +66,7 @@ const Marketplace = () => {
                                     <h3 className="text-theme-primary font-black text-lg uppercase leading-tight line-clamp-2 min-h-[48px] group-hover:text-[#E10600] transition-colors duration-300">
                                         {group.name}
                                     </h3>
-                                    <p className="text-theme-muted text-xs italic line-clamp-2 mt-3 leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity">
+                                    <p className="text-theme-primary text-xs italic line-clamp-2 mt-3 leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity">
                                         "{group.description}"
                                     </p>
                                 </div>
@@ -74,7 +74,7 @@ const Marketplace = () => {
                                 {/* Unified Stats Box */}
                                 <div className="bg-theme-secondary/50 group-hover:bg-theme-secondary rounded-2xl border border-theme p-4 flex justify-around items-center mb-6 mt-auto transition-colors duration-300">
                                     <div className="flex flex-col items-center flex-1 text-center">
-                                        <p className="text-theme-muted text-[9px] font-black uppercase mb-1 flex items-center gap-1.5 tracking-[0.1em]">
+                                        <p className="text-theme-primary text-[9px] font-black uppercase mb-1 flex items-center gap-1.5 tracking-[0.1em] opacity-60">
                                             <FiTrendingUp size={12} className="text-[#E10600]" /> Booking
                                         </p>
                                         <p className="text-[#E10600] font-black text-sm">{group.bookingPrice}</p>
@@ -83,7 +83,7 @@ const Marketplace = () => {
                                     <div className="h-8 w-px bg-theme-muted/20" />
                                     
                                     <div className="flex flex-col items-center flex-1 text-center">
-                                        <p className="text-theme-muted text-[9px] font-black uppercase mb-1 flex items-center gap-1.5 tracking-[0.1em]">
+                                        <p className="text-theme-primary text-[9px] font-black uppercase mb-1 flex items-center gap-1.5 tracking-[0.1em] opacity-60">
                                             <FiUsers size={12} className="text-[#E10600]" /> Followers
                                         </p>
                                         <p className="text-theme-primary font-black text-sm">{group.followers}</p>

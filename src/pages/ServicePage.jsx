@@ -51,10 +51,10 @@ const ServicePage = () => {
         <div className="bg-theme-primary min-h-screen font-sans py-24 px-4 transition-colors duration-300">
             {/* Main Header */}
             <div className="text-center mb-16">
-                <h1 className="text-theme-primary text-6xl md:text-8xl font-black italic tracking-tighter mb-4 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
-                    DỊCH VỤ <span className="text-[#10b981]">VenKheo</span>
+                <h1 className="text-theme-primary text-6xl md:text-8xl font-black italic tracking-tighter mb-4 drop-shadow-[0_0_15px_rgba(225,6,0,0.2)]">
+                    DỊCH VỤ <span className="text-[#E10600]">VenKheo</span>
                 </h1>
-                <p className="text-gray-400 text-sm md:text-lg font-medium italic opacity-80">
+                <p className="text-theme-primary text-sm md:text-lg font-medium italic opacity-80">
                     Bùng nổ Thảo luận Cộng đồng cùng VenKheoLLC.
                 </p>
             </div>
@@ -64,11 +64,11 @@ const ServicePage = () => {
                 {services.map((service, index) => (
                     <div 
                         key={index} 
-                        className="bg-[#0f172a] rounded-[60px] p-10 md:p-14 border border-white/5 shadow-2xl flex flex-col items-center transition-all duration-500 hover:translate-y-[-10px] hover:border-[#10b981]/30 group"
+                        className="bg-[#0f172a] rounded-[60px] p-10 md:p-14 border border-white/5 shadow-2xl flex flex-col items-center transition-all duration-500 hover:translate-y-[-10px] hover:border-[#E10600]/30 group"
                     >
                         {/* Title Section */}
                         <div className="text-center mb-10">
-                            <h2 className="text-[#10b981] text-3xl md:text-5xl font-black tracking-tight mb-2">
+                            <h2 className="text-[#E10600] text-3xl md:text-5xl font-black tracking-tight mb-2">
                                 {service.title}
                             </h2>
                             <p className="text-gray-500 text-xs font-black uppercase tracking-[0.3em]">
@@ -86,7 +86,7 @@ const ServicePage = () => {
                         <div className="w-full space-y-5 mb-12 flex-1">
                             {service.features.map((feature, idx) => (
                                 <div key={idx} className="flex items-start gap-3">
-                                    <FiCheckCircle className="text-[#10b981] mt-1 shrink-0" size={16} />
+                                    <FiCheckCircle className="text-[#E10600] mt-1 shrink-0" size={16} />
                                     <span className="text-gray-300 text-sm font-bold leading-tight opacity-90">{feature}</span>
                                 </div>
                             ))}
@@ -97,13 +97,13 @@ const ServicePage = () => {
                             <p className="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-4">
                                 {service.duration}
                             </p>
-                            <div className="text-[#10b981] text-3xl md:text-4xl font-black tracking-tighter italic">
+                            <div className="text-[#E10600] text-3xl md:text-4xl font-black tracking-tighter italic">
                                 {service.price}
                             </div>
                         </div>
 
                         {/* Action Button */}
-                        <button className="w-full bg-[#008000] hover:bg-[#00a300] text-white font-black text-xs py-5 rounded-3xl uppercase tracking-[0.1em] transition-all shadow-[0_10px_30px_rgba(0,128,0,0.3)] active:scale-95">
+                        <button className="w-full bg-[#E10600] hover:bg-[#b20500] text-white font-black text-xs py-5 rounded-3xl uppercase tracking-[0.1em] transition-all shadow-[0_10px_30px_rgba(225,6,0,0.3)] active:scale-95">
                             THÊM VÀO CHIẾN DỊCH
                         </button>
                     </div>

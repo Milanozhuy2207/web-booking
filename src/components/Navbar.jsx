@@ -15,7 +15,10 @@ const Navbar = () => {
     ];
 
     return (
-        <nav className="bg-[#E10600]/90 backdrop-blur-2xl border-b border-white/10 font-sans sticky top-0 z-50 transition-colors duration-300 shadow-xl">
+        <nav 
+            style={{ backgroundColor: isDarkMode ? 'rgba(11, 15, 25, 0.9)' : 'rgba(225, 6, 0, 0.9)' }}
+            className="backdrop-blur-2xl border-b border-white/10 dark:border-white/5 font-sans sticky top-0 z-50 transition-all duration-300 shadow-xl"
+        >
             <div className="max-w-[1600px] mx-auto px-4 md:px-8">
                 <div className="flex justify-between items-center h-24">
 

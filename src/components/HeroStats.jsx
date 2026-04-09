@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { groupsData } from '../data/mockData';
 import { FiFilter, FiChevronDown, FiSearch, FiX, FiFacebook } from 'react-icons/fi';
 import { useCart } from './CartContext';
-import banner from '../assets/Banner.jpg';
+import banner from '../assets/Banner.png';
 
 const HeroStats = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,7 +45,7 @@ const HeroStats = () => {
                         <h1 className="text-white text-[39px] md:text-[87px] font-black uppercase tracking-tighter mb-2 drop-shadow-2xl leading-none">
                             VÉN KHÉO<span className="text-[#E10600]">.</span>
                         </h1>
-                        <p className="text-gray-300 text-sm md:text-base font-medium max-w-2xl mx-auto opacity-70 leading-relaxed italic hidden sm:block">
+                        <p className="text-white text-sm md:text-base font-medium max-w-2xl mx-auto opacity-80 leading-relaxed italic hidden sm:block">
                             "Kết nối thương hiệu với cộng đồng Facebook Fanpage & Group chất lượng nhất"
                         </p>
                     </div>
@@ -59,7 +59,7 @@ const HeroStats = () => {
                             {stats.map((stat, index) => (
                                 <React.Fragment key={index}>
                                     <div className="flex flex-col items-center flex-1">
-                                        <p className="text-gray-400 text-[10px] md:text-[12px] font-black tracking-[0.4em] uppercase mb-2 whitespace-nowrap opacity-60">
+                                        <p className="text-white text-[10px] md:text-[12px] font-black tracking-[0.4em] uppercase mb-2 whitespace-nowrap opacity-80">
                                             {stat.label}
                                         </p>
                                         <p className="text-white text-3xl md:text-5xl font-black tracking-tighter drop-shadow-lg">
