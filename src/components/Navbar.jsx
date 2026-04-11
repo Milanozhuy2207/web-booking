@@ -6,7 +6,16 @@ import logo from '../assets/logo.png';
 
 const Navbar = () => {
     const { cartItems, setIsCartOpen, isDarkMode, toggleTheme } = useCart();
+    const [isScrolled, setIsScrolled] = React.useState(false);
     const location = useLocation();
+
+    React.useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     const navLinks = [
         { name: 'Hệ thống Kênh', path: '/' },
@@ -16,26 +25,38 @@ const Navbar = () => {
 
     return (
         <nav 
-            style={{ backgroundColor: isDarkMode ? 'rgba(11, 15, 25, 0.9)' : 'rgba(225, 6, 0, 0.9)' }}
-            className="backdrop-blur-2xl border-b border-white/10 dark:border-white/5 font-sans sticky top-0 z-50 transition-all duration-300 shadow-xl"
+            className={`backdrop-blur-xl border-b ${isScrolled ? 'border-white/5 shadow-lg' : 'border-white/10 shadow-xl'} font-sans sticky top-0 z-50 transition-all duration-500`}
+            style={{ 
+                backgroundColor: isScrolled 
+                    ? (isDarkMode ? 'rgba(11, 15, 25, 0.6)' : 'rgba(225, 6, 0, 0.6)') 
+                    : (isDarkMode ? 'rgba(11, 15, 25, 1)' : '#E10600') 
+            }}
         >
             <div className="max-w-[1600px] mx-auto px-4 md:px-8">
-                <div className="flex justify-between items-center h-24">
+                <div className={`flex justify-between items-center transition-all duration-500 ${isScrolled ? 'h-16 md:h-20' : 'h-20 md:h-24'}`}>
 
                     {/* Logo & Branding */}
                     <Link to="/" className="flex items-center gap-4 cursor-pointer group">
-                        <div className="relative">
-                            <div className="absolute inset-0 bg-white rounded-2xl blur-lg opacity-20 group-hover:opacity-40 transition-opacity duration-500" />
-                            <div className="relative h-10 w-10 md:h-12 md:w-12 bg-white rounded-2xl flex items-center justify-center p-1.5 shadow-2xl border-2 border-white/20 transition-transform duration-500 group-hover:scale-110">
-                                <img 
-                                    src={logo} 
-                                    alt="Vén Khéo Logo" 
-                                    className="h-full w-full object-contain" 
-                                />
+                        {/* Desktop: Icon + VÉN KHÉO. */}
+                        <div className="hidden md:flex items-center gap-4">
+                            <div className="relative">
+                                <div className="absolute inset-0 bg-white rounded-2xl blur-lg opacity-20 group-hover:opacity-40 transition-opacity duration-500" />
+                                <div className={`relative ${isScrolled ? 'h-8 w-8 md:h-10 md:w-10' : 'h-10 w-10 md:h-12 md:w-12'} bg-white rounded-2xl flex items-center justify-center p-1.5 shadow-2xl border-2 border-white/20 transition-all duration-500 group-hover:scale-110`}>
+                                    <img 
+                                        src={logo} 
+                                        alt="Vén Khéo Logo" 
+                                        className="h-full w-full object-contain" 
+                                    />
+                                </div>
                             </div>
+                            <h1 className={`text-white font-black transition-all duration-500 ${isScrolled ? 'text-xl md:text-2xl' : 'text-2xl md:text-3xl'} tracking-widest uppercase drop-shadow-md`}>
+                                VENKHEO LLC<span className="text-white"></span>
+                            </h1>
                         </div>
-                        <h1 className="text-white font-black text-2xl md:text-3xl tracking-widest uppercase hidden sm:block drop-shadow-md">
-                            VÉN KHÉO<span className="text-white">.</span>
+
+                        {/* Mobile: VenKheo LLC text */}
+                        <h1 className="md:hidden text-white font-black text-xl tracking-tighter uppercase drop-shadow-md">
+                            VenKheo LLC
                         </h1>
                     </Link>
 
@@ -49,7 +70,7 @@ const Navbar = () => {
                                     className={`relative transition-colors ${
                                         location.pathname === link.path 
                                         ? 'text-white after:absolute after:bottom-[-4px] after:left-0 after:w-full after:h-[2px] after:bg-white after:rounded-full' 
-                                        : 'text-white/70 hover:text-white'
+                                        : 'text-white hover:text-white/80'
                                     }`}
                                 >
                                     {link.name}
@@ -60,7 +81,7 @@ const Navbar = () => {
                         <div className="flex items-center gap-3 md:gap-4 pl-4 md:pl-8 border-l border-white/20">
                             <button 
                                 onClick={toggleTheme}
-                                className="w-12 h-12 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/20 transition-all cursor-pointer shadow-sm active:scale-95"
+                                className="w-12 h-12 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all cursor-pointer shadow-sm active:scale-95"
                             >
                                 {isDarkMode ? <FiSun size={20} /> : <FiMoon size={20} />}
                             </button>

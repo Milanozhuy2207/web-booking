@@ -54,7 +54,7 @@ const ServicePage = () => {
                 <h1 className="text-theme-primary text-6xl md:text-8xl font-black italic tracking-tighter mb-4 drop-shadow-[0_0_15px_rgba(225,6,0,0.2)]">
                     DỊCH VỤ <span className="text-[#E10600]">VenKheo</span>
                 </h1>
-                <p className="text-theme-primary text-sm md:text-lg font-medium italic opacity-80">
+                <p className="text-theme-primary text-sm md:text-lg font-medium italic opacity-80 hidden md:block">
                     Bùng nổ Thảo luận Cộng đồng cùng VenKheoLLC.
                 </p>
             </div>

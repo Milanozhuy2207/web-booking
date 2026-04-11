@@ -6,19 +6,23 @@ import { CartProvider } from './components/CartContext';
 import HomePage from './pages/HomePage';
 import PromotionPage from './pages/PromotionPage';
 import ServicePage from './pages/ServicePage';
+import MobileNavbar from './components/MobileNavbar';
+import Notification from './components/Notification';
 
 function App() {
   return (
     <CartProvider>
       <Router>
-        <div className="min-h-screen relative overflow-hidden transition-colors duration-300">
+        <div className="min-h-screen relative transition-colors duration-300 pb-20 md:pb-0">
           <Navbar />
+          <Notification />
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/promotions" element={<PromotionPage />} />
             <Route path="/services" element={<ServicePage />} />
           </Routes>
           <CartSidebar />
+          <MobileNavbar />
         </div>
       </Router>
     </CartProvider>

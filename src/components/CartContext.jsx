@@ -21,6 +21,7 @@ export const CartProvider = ({ children }) => {
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [followerRange, setFollowerRange] = useState('All');
     const [budgetRange, setBudgetRange] = useState('All');
+    const [notification, setNotification] = useState(null);
 
     useEffect(() => {
         const root = window.document.documentElement;
@@ -38,12 +39,21 @@ export const CartProvider = ({ children }) => {
     const addToCart = (group) => {
         if (!cartItems.find(item => item.id === group.id)) {
             setCartItems([...cartItems, group]);
+            setNotification(`Đã thêm "${group.name}" vào giỏ hàng!`);
+            setTimeout(() => setNotification(null), 3000);
+        } else {
+            setNotification(`"${group.name}" đã có trong giỏ hàng.`);
+            setTimeout(() => setNotification(null), 3000);
         }
         setIsCartOpen(true);
     };
 
     const removeFromCart = (id) => {
         setCartItems(cartItems.filter(item => item.id !== id));
+    };
+
+    const clearCart = () => {
+        setCartItems([]);
     };
 
     const parseFollowers = (val) => {
@@ -89,6 +99,7 @@ export const CartProvider = ({ children }) => {
             setIsCartOpen, 
             addToCart, 
             removeFromCart,
+            clearCart,
             searchTerm,
             setSearchTerm,
             selectedCategory,
@@ -101,6 +112,8 @@ export const CartProvider = ({ children }) => {
             categories,
             followerOptions,
             budgetOptions,
+            notification,
+            setNotification,
             isDarkMode,
             toggleTheme
         }}>

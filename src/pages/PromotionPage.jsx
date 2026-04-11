@@ -40,25 +40,25 @@ const PromotionPage = () => {
             </div>
 
             {/* Bars Container */}
-            <div className="flex items-end justify-center gap-4 md:gap-6 w-full max-w-6xl mb-12">
+            <div className="flex flex-col md:flex-row items-center md:items-end justify-center gap-4 md:gap-6 w-full max-w-6xl mb-12">
                 {deals.map((deal, index) => (
                     <div 
                         key={index} 
-                        className={`relative ${deal.height} w-full flex flex-col items-center justify-center rounded-t-[40px] md:rounded-t-[60px] transition-all duration-500 hover:scale-105 cursor-default ${deal.bgColor}`}
+                        className={`relative ${deal.height} w-full md:w-full flex flex-col items-center justify-center rounded-[30px] md:rounded-t-[60px] md:rounded-b-none transition-all duration-500 hover:scale-105 cursor-default ${deal.bgColor} py-8 md:py-0`}
                     >
                         {deal.highlight && (
-                            <div className="absolute -top-10 left-1/2 -translate-x-1/2">
-                                <div className="bg-[#fbbf24] text-black text-[10px] font-black px-4 py-1.5 rounded-full flex items-center gap-1 whitespace-nowrap shadow-lg">
+                            <div className="absolute -top-5 md:-top-10 left-1/2 -translate-x-1/2 z-10">
+                                <div className="bg-[#fbbf24] text-black text-[8px] md:text-[10px] font-black px-3 md:px-4 py-1.5 rounded-full flex items-center gap-1 whitespace-nowrap shadow-lg">
                                     BÙNG NỔ ⚡
                                 </div>
                             </div>
                         )}
                         
-                        <div className="text-center px-2">
-                            <p className="text-white/80 text-[10px] md:text-xs font-black uppercase tracking-widest mb-2">
+                        <div className="text-center px-4">
+                            <p className="text-white/80 text-[10px] md:text-xs font-black uppercase tracking-widest mb-1 md:mb-2">
                                 BOOKING TỪ
                             </p>
-                            <p className="text-white text-sm md:text-lg font-black uppercase mb-4">
+                            <p className="text-white text-sm md:text-lg font-black uppercase mb-2 md:mb-4">
                                 {deal.range}
                             </p>
                             <div className="text-white text-5xl md:text-7xl font-black italic tracking-tighter drop-shadow-lg">
@@ -75,7 +75,7 @@ const PromotionPage = () => {
                     <span className="text-theme-primary">ÁP DỤNG TỰ ĐỘNG CHO PLATFORM: </span>
                     <span className="text-[#E10600]">FACEBOOK GROUP, FACEBOOK PAGE</span>
                 </p>
-                <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] mt-2">
+                <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] mt-2 hidden md:block">
                     <span className="text-theme-primary">THUỘC </span>
                     <span className="text-[#E10600]">VenKheoLLC.</span>
                 </p>

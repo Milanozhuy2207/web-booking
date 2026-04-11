@@ -1,10 +1,10 @@
 import { useCart } from "./CartContext"
 import { FiX, FiTrash2, FiShoppingCart } from 'react-icons/fi';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
 const CartSidebar = () => {
-    const { cartItems, isCartOpen, setIsCartOpen, removeFromCart } = useCart()
+    const { cartItems, isCartOpen, setIsCartOpen, removeFromCart, clearCart } = useCart()
 
     const subTotal = cartItems.reduce((total, item) => total + (item.price || 0), 0)
     const vat = subTotal * 0.08
@@ -14,80 +14,142 @@ const CartSidebar = () => {
         return amount.toLocaleString('vi-VN') + ' ₫'
     }
 
+    const removeVietnameseTones = (str) => {
+        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+        str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+        str = str.replace(/ò|ó|ọ|ỏ|ã|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+        str = str.replace(/đ/g, "d");
+        str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+        str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+        str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+        str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+        str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+        str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+        str = str.replace(/Đ/g, "D");
+        // Some system encode Vietnamese combining accent as individual utf-8 characters
+        str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); // ̀ ́ ̃ ̉ ̣  
+        str = str.replace(/\u02C6|\u0306|\u031B/g, ""); // ˆ ̆ ̛  Retaining for consistency
+        return str;
+    }
+
     const generatePDF = () => {
         const doc = new jsPDF();
         
-        // Header
-        doc.setFontSize(22);
-        doc.setTextColor(220, 38, 38); // Vén Khéo Green
-        doc.text("VÉN KHÉO", 105, 20, { align: "center" });
+        // Header Luxury Style
+        doc.setFillColor(225, 6, 0); // Màu đỏ Vén Khéo
+        doc.rect(0, 0, 210, 40, 'F');
         
-        doc.setFontSize(14);
-        doc.setTextColor(100);
-        doc.text("BÁO GIÁ DỊCH VỤ BOOKING", 105, 30, { align: "center" });
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(28);
+        doc.setFont("helvetica", "bold");
+        doc.text("VEN KHEO NETWORK", 105, 20, { align: "center" });
         
         doc.setFontSize(10);
-        doc.text(`Ngày: ${new Date().toLocaleDateString('vi-VN')}`, 105, 38, { align: "center" });
+        doc.setFont("helvetica", "normal");
+        doc.text("HE THONG BOOKING KOLS & CONG DONG HANG DAU", 105, 30, { align: "center" });
+        
+        // Thông tin báo giá
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(18);
+        doc.setFont("helvetica", "bold");
+        doc.text("BAO GIA DICH VU", 20, 55);
+        
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(100);
+        doc.text(`Ma bao gia: VK-${new Date().getTime().toString().slice(-6)}`, 20, 62);
+        doc.text(`Ngay lap: ${new Date().toLocaleDateString('vi-VN')}`, 20, 67);
+        doc.text(`Het han: ${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('vi-VN')}`, 20, 72);
         
         // Table Items
-        const tableColumn = ["STT", "Tên Kênh", "Nền Tảng", "Đơn Giá (VND)"];
+        const tableColumn = ["STT", "TEN KENH / DICH VU", "PLATFORM", "DON GIA (VND)"];
         const tableRows = [];
 
         cartItems.forEach((item, index) => {
             const rowData = [
                 index + 1,
-                item.name,
-                item.platform,
+                removeVietnameseTones(item.name).toUpperCase(),
+                removeVietnameseTones(item.platform).toUpperCase(),
                 item.price.toLocaleString('vi-VN')
             ];
             tableRows.push(rowData);
         });
 
-        // Generate Table
-        doc.autoTable({
-            startY: 50,
+        // Generate Table với style chuyên nghiệp
+        autoTable(doc, {
+            startY: 80,
             head: [tableColumn],
             body: tableRows,
-            theme: 'grid',
-            headStyles: { fillColor: [220, 38, 38], textColor: [255, 255, 255], fontStyle: 'bold' },
-            styles: { fontSize: 9, cellPadding: 3 },
+            theme: 'striped',
+            headStyles: { 
+                fillColor: [30, 41, 59], 
+                textColor: [255, 255, 255], 
+                fontSize: 10, 
+                fontStyle: 'bold',
+                halign: 'center'
+            },
+            bodyStyles: { fontSize: 9, cellPadding: 5 },
             columnStyles: {
                 0: { halign: 'center', cellWidth: 15 },
-                1: { cellWidth: 80 },
+                1: { cellWidth: 90 },
                 2: { halign: 'center', cellWidth: 35 },
                 3: { halign: 'right', cellWidth: 40 }
-            }
+            },
+            alternateRowStyles: { fillColor: [245, 245, 245] }
         });
 
         // Summary Calculations
-        const finalY = doc.lastAutoTable.finalY + 10;
+        const finalY = doc.lastAutoTable.finalY + 15;
+        const summaryX = 130;
         
         doc.setFontSize(10);
-        doc.setTextColor(80);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(100);
         
-        const summaryX = 140;
-        doc.text("Tạm tính:", summaryX, finalY);
-        doc.text(subTotal.toLocaleString('vi-VN') + " VND", 200, finalY, { align: "right" });
+        doc.text("Tam tinh:", summaryX, finalY);
+        doc.text(subTotal.toLocaleString('vi-VN') + " VND", 190, finalY, { align: "right" });
         
-        doc.text("VAT (8%):", summaryX, finalY + 7);
-        doc.text(vat.toLocaleString('vi-VN') + " VND", 200, finalY + 7, { align: "right" });
+        doc.text("Thue VAT (8%):", summaryX, finalY + 8);
+        doc.text(vat.toLocaleString('vi-VN') + " VND", 190, finalY + 8, { align: "right" });
+        
+        // Tổng cộng Highlight
+        doc.setFillColor(225, 6, 0);
+        doc.rect(summaryX - 5, finalY + 13, 70, 12, 'F');
         
         doc.setFontSize(12);
-        doc.setFont(undefined, 'bold');
-        doc.setTextColor(220, 38, 38);
-        doc.text("TỔNG CỘNG:", summaryX, finalY + 16);
-        doc.text(grandTotal.toLocaleString('vi-VN') + " VND", 200, finalY + 16, { align: "right" });
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(255, 255, 255);
+        doc.text("TONG CONG:", summaryX, finalY + 21);
+        doc.text(grandTotal.toLocaleString('vi-VN') + " VND", 190, finalY + 21, { align: "right" });
         
-        // Footer
+        // Footer & Terms
         const pageHeight = doc.internal.pageSize.height;
+        
         doc.setFontSize(9);
-        doc.setFont(undefined, 'italic');
-        doc.setTextColor(150);
-        doc.text("Cảm ơn bạn đã tin tưởng dịch vụ của Vén Khéo!", 105, pageHeight - 20, { align: "center" });
-        doc.text("Website: venkheo.com | Email: contact@venkheo.com", 105, pageHeight - 14, { align: "center" });
+        doc.setTextColor(100);
+        doc.setFont("helvetica", "bold");
+        doc.text("DIEU KHOAN THANH TOAN:", 20, pageHeight - 45);
+        doc.setFont("helvetica", "normal");
+        doc.text("- Bao gia co hieu luc trong vong 07 ngay ke tu ngay ky.", 20, pageHeight - 38);
+        doc.text("- Quy khach vui long thanh toan 100% gia tri hop dong de trien khai.", 20, pageHeight - 33);
+        
+        doc.setDrawColor(225, 6, 0);
+        doc.setLineWidth(1);
+        doc.line(20, pageHeight - 25, 190, pageHeight - 25);
+        
+        doc.setFontSize(8);
+        doc.text("VEN KHEO NETWORK - KET NOI THUONG HIEU VOI CONG DONG", 105, pageHeight - 15, { align: "center" });
+        doc.text("Email: contact@venkheo.com | Hotline: 09xx xxx xxx | Website: venkheo.com", 105, pageHeight - 10, { align: "center" });
 
         // Save PDF
-        doc.save(`Bao_Gia_Ven_Kheo_${new Date().getTime()}.pdf`);
+        doc.save(`Bao_Gia_Ven_Kheo_${new Date().getTime().toString().slice(-6)}.pdf`);
+
+        // Clear cart and close sidebar
+        clearCart();
+        setIsCartOpen(false);
     };
 
     return (
