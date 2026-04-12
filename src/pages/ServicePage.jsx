@@ -1,10 +1,17 @@
 import React from 'react';
 import { FiCheckCircle } from 'react-icons/fi';
+import { useCart } from '../components/CartContext';
 
 const ServicePage = () => {
+    const { addToCart, cartItems } = useCart();
+
     const services = [
         {
+            id: 'srv-1',
+            name: "VenKheo BUZZ",
             title: "VenKheo BUZZ",
+            platform: "Dịch vụ",
+            image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=400&h=200",
             subtitle: "KHỞI ĐỘNG",
             mainGoal: "Kích hoạt thảo luận ban đầu",
             features: [
@@ -15,10 +22,15 @@ const ServicePage = () => {
                 "Ghim 2 post"
             ],
             duration: "GIÁ TRỊ TRỌN GÓI (7 NGÀY):",
-            price: "25.000.000 ₫"
+            displayPrice: "25.000.000 ₫",
+            price: 25000000
         },
         {
+            id: 'srv-2',
+            name: "VenKheo PRO",
             title: "VenKheo PRO",
+            platform: "Dịch vụ",
+            image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=400&h=200",
             subtitle: "KHUẾCH ĐẠI",
             mainGoal: "Tăng uy tín & độ phủ",
             features: [
@@ -29,10 +41,15 @@ const ServicePage = () => {
                 "Ghim tối đa 3 post"
             ],
             duration: "GIÁ TRỊ TRỌN GÓI (14 NGÀY):",
-            price: "40.000.000 ₫"
+            displayPrice: "40.000.000 ₫",
+            price: 40000000
         },
         {
+            id: 'srv-3',
+            name: "VenKheo PARTNER",
             title: "VenKheo PARTNER",
+            platform: "Dịch vụ",
+            image: "https://images.unsplash.com/photo-1556761175-5973dc0f32b7?auto=format&fit=crop&q=80&w=400&h=200",
             subtitle: "ĐỒNG HÀNH",
             mainGoal: "Xây dựng ảnh hưởng dài hạn",
             features: [
@@ -43,7 +60,8 @@ const ServicePage = () => {
                 "Báo cáo số liệu chuyên nghiệp"
             ],
             duration: "GIÁ TRỊ TRỌN GÓI (30 NGÀY):",
-            price: "100.000.000 ₫"
+            displayPrice: "100.000.000 ₫",
+            price: 100000000
         }
     ];
 
@@ -98,13 +116,21 @@ const ServicePage = () => {
                                 {service.duration}
                             </p>
                             <div className="text-[#E10600] text-3xl md:text-4xl font-black tracking-tighter italic">
-                                {service.price}
+                                {service.displayPrice}
                             </div>
                         </div>
 
                         {/* Action Button */}
-                        <button className="w-full bg-[#E10600] hover:bg-[#b20500] text-white font-black text-xs py-5 rounded-3xl uppercase tracking-[0.1em] transition-all shadow-[0_10px_30px_rgba(225,6,0,0.3)] active:scale-95">
-                            THÊM VÀO CHIẾN DỊCH
+                        <button 
+                            onClick={() => addToCart(service)}
+                            disabled={cartItems.some(item => item.id === service.id)}
+                            className={`w-full font-black text-xs py-5 rounded-3xl uppercase tracking-[0.1em] transition-all active:scale-95 ${
+                                cartItems.some(item => item.id === service.id)
+                                ? 'bg-gray-500/20 text-gray-500 cursor-default'
+                                : 'bg-[#E10600] hover:bg-[#b20500] text-white shadow-[0_10px_30px_rgba(225,6,0,0.3)]'
+                            }`}
+                        >
+                            {cartItems.some(item => item.id === service.id) ? 'ĐÃ THÊM VÀO GIỎ' : 'THÊM VÀO CHIẾN DỊCH'}
                         </button>
                     </div>
                 ))}

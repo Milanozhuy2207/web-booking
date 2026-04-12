@@ -7,8 +7,20 @@ const CartSidebar = () => {
     const { cartItems, isCartOpen, setIsCartOpen, removeFromCart, clearCart } = useCart()
 
     const subTotal = cartItems.reduce((total, item) => total + (item.price || 0), 0)
-    const vat = subTotal * 0.08
-    const grandTotal = subTotal + vat
+    
+    const getDiscountPercent = (count) => {
+        if (count >= 2 && count <= 5) return 0.1;
+        if (count >= 6 && count <= 10) return 0.15;
+        if (count >= 11 && count <= 20) return 0.2;
+        if (count > 20) return 0.25;
+        return 0;
+    }
+
+    const discountPercent = getDiscountPercent(cartItems.length);
+    const discountAmount = subTotal * discountPercent;
+    const discountedSubTotal = subTotal - discountAmount;
+    const vat = discountedSubTotal * 0.08
+    const grandTotal = discountedSubTotal + vat
 
     const formatMoney = (amount) => {
         return amount.toLocaleString('vi-VN') + ' ₫'
@@ -112,18 +124,36 @@ const CartSidebar = () => {
         doc.text("Tam tinh:", summaryX, finalY);
         doc.text(subTotal.toLocaleString('vi-VN') + " VND", 190, finalY, { align: "right" });
         
-        doc.text("Thue VAT (8%):", summaryX, finalY + 8);
-        doc.text(vat.toLocaleString('vi-VN') + " VND", 190, finalY + 8, { align: "right" });
-        
-        // Tổng cộng Highlight
-        doc.setFillColor(225, 6, 0);
-        doc.rect(summaryX - 5, finalY + 13, 70, 12, 'F');
-        
-        doc.setFontSize(12);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(255, 255, 255);
-        doc.text("TONG CONG:", summaryX, finalY + 21);
-        doc.text(grandTotal.toLocaleString('vi-VN') + " VND", 190, finalY + 21, { align: "right" });
+        if (discountAmount > 0) {
+            doc.text(`Chiet khau (${discountPercent * 100}%):`, summaryX, finalY + 8);
+            doc.text("-" + discountAmount.toLocaleString('vi-VN') + " VND", 190, finalY + 8, { align: "right" });
+            
+            doc.text("Thue VAT (8%):", summaryX, finalY + 16);
+            doc.text(vat.toLocaleString('vi-VN') + " VND", 190, finalY + 16, { align: "right" });
+            
+            // Tổng cộng Highlight
+            doc.setFillColor(225, 6, 0);
+            doc.rect(summaryX - 5, finalY + 21, 70, 12, 'F');
+            
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(255, 255, 255);
+            doc.text("TONG CONG:", summaryX, finalY + 29);
+            doc.text(grandTotal.toLocaleString('vi-VN') + " VND", 190, finalY + 29, { align: "right" });
+        } else {
+            doc.text("Thue VAT (8%):", summaryX, finalY + 8);
+            doc.text(vat.toLocaleString('vi-VN') + " VND", 190, finalY + 8, { align: "right" });
+            
+            // Tổng cộng Highlight
+            doc.setFillColor(225, 6, 0);
+            doc.rect(summaryX - 5, finalY + 13, 70, 12, 'F');
+            
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(255, 255, 255);
+            doc.text("TONG CONG:", summaryX, finalY + 21);
+            doc.text(grandTotal.toLocaleString('vi-VN') + " VND", 190, finalY + 21, { align: "right" });
+        }
         
         // Footer & Terms
         const pageHeight = doc.internal.pageSize.height;
@@ -166,8 +196,8 @@ const CartSidebar = () => {
             <div className={`fixed top-0 right-0 h-full w-full md:w-[450px] bg-theme-primary border-l border-theme shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}`}>
 
                 {/* Header */}
-                <div className="flex justify-between items-center p-5 border-b border-theme bg-theme-secondary transition-colors">
-                    <h2 className="text-theme-primary text-xl font-black uppercase tracking-tight">Báo Giá Của Bạn</h2>
+                <div className="flex justify-between items-center p-4 md:p-5 border-b border-theme bg-theme-secondary transition-colors shrink-0">
+                    <h2 className="text-theme-primary text-lg md:text-xl font-black uppercase tracking-tight">Báo Giá Của Bạn</h2>
                     <button
                         onClick={() => setIsCartOpen(false)}
                         className="p-2 text-theme-muted hover:text-theme-primary hover:bg-theme-secondary rounded-full transition-colors cursor-pointer"
@@ -177,19 +207,19 @@ const CartSidebar = () => {
                 </div>
 
                 {/* Danh sách items */}
-                <div className="flex-1 overflow-y-auto p-5 space-y-4">
+                <div className="flex-1 overflow-y-auto p-4 md:p-5 space-y-4 custom-scrollbar">
                     {cartItems.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center h-full text-theme-muted">
+                        <div className="flex flex-col items-center justify-center h-full text-theme-muted py-10">
                             <FiShoppingCart size={48} className="mb-4 opacity-20" />
                             <p className="text-center font-medium">Giỏ hàng đang trống.</p>
                         </div>
                     ) : (
                         cartItems.map(item => (
-                            <div key={item.id} className="flex justify-between items-center bg-theme-secondary p-4 rounded-xl border border-theme transition-colors">
+                            <div key={item.id} className="flex justify-between items-center bg-theme-secondary p-3 md:p-4 rounded-xl border border-theme transition-colors shadow-sm">
                                 <div className="flex-1 pr-4">
-                                    <span className="text-[#E10600] text-[10px] font-bold uppercase tracking-wider">{item.platform}</span>
-                                    <h4 className="text-theme-primary font-bold text-sm line-clamp-1">{item.name}</h4>
-                                    <p className="text-theme-muted text-xs mt-1">{formatMoney(item.price)}</p>
+                                    <span className="text-[#E10600] text-[9px] md:text-[10px] font-bold uppercase tracking-wider">{item.platform}</span>
+                                    <h4 className="text-theme-primary font-bold text-xs md:text-sm line-clamp-1">{item.name}</h4>
+                                    <p className="text-theme-muted text-[10px] md:text-xs mt-1">{formatMoney(item.price)}</p>
                                 </div>
                                 <button
                                     onClick={() => removeFromCart(item.id)}
@@ -202,18 +232,25 @@ const CartSidebar = () => {
                     )}
                 </div>
 
+                {/* Footer Section - Shrink-0 ensures it stays at the bottom */}
                 {cartItems.length > 0 && (
-                    <div className="p-5 bg-theme-secondary border-t border-theme transition-colors">
-                        <div className="space-y-3 mb-5">
-                            <div className="flex justify-between text-theme-secondary text-sm">
+                    <div className="p-4 md:p-5 bg-theme-secondary border-t border-theme transition-colors shrink-0 mb-[env(safe-area-inset-bottom)]">
+                        <div className="space-y-2 md:space-y-3 mb-4 md:mb-5">
+                            <div className="flex justify-between text-theme-secondary text-[12px] md:text-sm">
                                 <span>Tạm tính</span>
                                 <span className="text-theme-primary font-bold">{formatMoney(subTotal)}</span>
                             </div>
-                            <div className="flex justify-between text-theme-secondary text-sm">
+                            {discountAmount > 0 && (
+                                <div className="flex justify-between text-theme-secondary text-[12px] md:text-sm">
+                                    <span>Chiết khấu ({discountPercent * 100}%)</span>
+                                    <span className="text-green-500 font-bold">-{formatMoney(discountAmount)}</span>
+                                </div>
+                            )}
+                            <div className="flex justify-between text-theme-secondary text-[12px] md:text-sm">
                                 <span>VAT (8%)</span>
                                 <span className="text-theme-primary font-bold">{formatMoney(vat)}</span>
                             </div>
-                            <div className="flex justify-between text-theme-primary font-black text-xl pt-4 border-t border-theme">
+                            <div className="flex justify-between text-theme-primary font-black text-lg md:text-xl pt-3 md:pt-4 border-t border-theme">
                                 <span>TỔNG CỘNG</span>
                                 <span className="text-[#E10600]">{formatMoney(grandTotal)}</span>
                             </div>
@@ -221,7 +258,7 @@ const CartSidebar = () => {
 
                         <button 
                             onClick={generatePDF}
-                            className="w-full bg-[#E10600] hover:bg-red-700 text-white font-black py-4 rounded-xl uppercase tracking-[0.1em] transition-all shadow-lg shadow-[#E10600]/20 active:scale-95 cursor-pointer"
+                            className="w-full bg-[#E10600] hover:bg-red-700 text-white font-black py-3.5 md:py-4 rounded-xl uppercase tracking-[0.1em] transition-all shadow-lg shadow-[#E10600]/20 active:scale-95 cursor-pointer text-xs md:text-sm"
                         >
                             Tải Xuống Báo Giá
                         </button>

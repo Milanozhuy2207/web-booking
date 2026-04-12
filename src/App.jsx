@@ -6,6 +6,7 @@ import { CartProvider } from './components/CartContext';
 import HomePage from './pages/HomePage';
 import PromotionPage from './pages/PromotionPage';
 import ServicePage from './pages/ServicePage';
+import CartDetail from './pages/CartDetail';
 import MobileNavbar from './components/MobileNavbar';
 import Notification from './components/Notification';
 
@@ -20,8 +21,8 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/promotions" element={<PromotionPage />} />
             <Route path="/services" element={<ServicePage />} />
+            <Route path="/cart" element={<CartDetail />} />
           </Routes>
-          <CartSidebar />
           <MobileNavbar />
         </div>
       </Router>

@@ -37,15 +37,26 @@ export const CartProvider = ({ children }) => {
     const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
     const addToCart = (group) => {
-        if (!cartItems.find(item => item.id === group.id)) {
-            setCartItems([...cartItems, group]);
+        setCartItems(prevItems => {
+            const existingItem = prevItems.find(item => item.id === group.id);
+            if (existingItem) {
+                setNotification(`Đã tăng số lượng "${group.name}" trong giỏ hàng!`);
+                setTimeout(() => setNotification(null), 3000);
+                return prevItems.map(item => 
+                    item.id === group.id ? { ...item, quantity: (item.quantity || 1) + 1 } : item
+                );
+            }
             setNotification(`Đã thêm "${group.name}" vào giỏ hàng!`);
             setTimeout(() => setNotification(null), 3000);
-        } else {
-            setNotification(`"${group.name}" đã có trong giỏ hàng.`);
-            setTimeout(() => setNotification(null), 3000);
-        }
-        setIsCartOpen(true);
+            return [...prevItems, { ...group, quantity: 1 }];
+        });
+    };
+
+    const updateQuantity = (id, newQuantity) => {
+        if (newQuantity < 1) return;
+        setCartItems(prevItems => 
+            prevItems.map(item => item.id === id ? { ...item, quantity: newQuantity } : item)
+        );
     };
 
     const removeFromCart = (id) => {
@@ -99,6 +110,7 @@ export const CartProvider = ({ children }) => {
             setIsCartOpen, 
             addToCart, 
             removeFromCart,
+            updateQuantity,
             clearCart,
             searchTerm,
             setSearchTerm,
