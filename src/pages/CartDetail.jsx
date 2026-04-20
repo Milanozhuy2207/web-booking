@@ -162,22 +162,30 @@ const CartDetail = () => {
                     <Link to="/" className="flex items-center gap-2 text-theme-muted hover:text-[#E10600] transition-colors font-bold uppercase tracking-wider text-xs">
                         <FiArrowLeft size={16} /> Quay lại trang chủ
                     </Link>
-                    <h1 className="text-theme-primary text-2xl md:text-4xl font-black uppercase tracking-tight">Chi Tiết Báo Giá</h1>
+                    {cartItems.length > 0 && (
+                        <h1 className="text-theme-primary text-2xl md:text-4xl font-black uppercase tracking-tight">Chi Tiết Báo Giá</h1>
+                    )}
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Items List */}
-                    <div className="lg:col-span-2 space-y-4">
-                        {cartItems.length === 0 ? (
-                            <div className="bg-theme-secondary rounded-3xl p-12 text-center border border-theme">
-                                <FiShoppingCart size={64} className="mx-auto mb-6 opacity-20 text-theme-primary" />
-                                <p className="text-theme-muted text-lg font-medium mb-8">Giỏ hàng của bạn hiện đang trống.</p>
-                                <Link to="/" className="inline-block bg-[#E10600] text-white font-black px-8 py-4 rounded-xl uppercase tracking-widest hover:bg-red-700 transition-all shadow-lg shadow-red-500/20">
-                                    Khám phá dịch vụ
-                                </Link>
+                {cartItems.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-20 px-4">
+                        <div className="relative mb-8">
+                            <div className="absolute inset-0 bg-[#E10600] blur-[100px] opacity-10 animate-pulse"></div>
+                            <div className="relative bg-theme-secondary p-10 rounded-[40px] border border-theme shadow-2xl">
+                                <FiShoppingCart size={80} className="text-[#E10600] opacity-20" />
                             </div>
-                        ) : (
-                            cartItems.map(item => (
+                        </div>
+                        <h2 className="text-theme-primary text-2xl md:text-3xl font-black uppercase tracking-tight mb-4 text-center">Giỏ hàng của bạn đang trống</h2>
+                        <p className="text-theme-muted font-medium mb-10 text-center max-w-md">Hãy khám phá các kênh cộng đồng và dịch vụ của VenKheoLLC để bắt đầu chiến dịch truyền thông của bạn.</p>
+                        <Link to="/" className="bg-[#E10600] hover:bg-red-700 text-white font-black px-10 py-5 rounded-2xl uppercase tracking-[0.2em] transition-all shadow-2xl shadow-red-500/40 active:scale-95 text-sm">
+                            Bắt đầu ngay
+                        </Link>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        {/* Items List */}
+                        <div className="lg:col-span-2 space-y-4">
+                            {cartItems.map(item => (
                                 <div key={item.id} className="bg-theme-secondary p-4 md:p-6 rounded-[24px] border border-theme flex flex-col md:flex-row justify-between items-center gap-4 transition-all hover:border-[#E10600]/30 shadow-sm group">
                                     <div className="flex items-center gap-4 w-full md:w-auto">
                                         <div className="h-16 w-16 rounded-xl overflow-hidden bg-theme-primary shrink-0">
@@ -223,12 +231,10 @@ const CartDetail = () => {
                                         </button>
                                     </div>
                                 </div>
-                            ))
-                        )}
-                    </div>
+                            ))}
+                        </div>
 
-                    {/* Summary Card */}
-                    {cartItems.length > 0 && (
+                        {/* Summary Card */}
                         <div className="lg:col-span-1">
                             <div className="bg-theme-secondary rounded-[32px] border border-theme p-6 md:p-8 sticky top-32 shadow-xl">
                                 <h3 className="text-theme-primary font-black text-xl uppercase tracking-wider mb-6 pb-4 border-b border-theme">Tổng cộng</h3>
@@ -270,8 +276,8 @@ const CartDetail = () => {
                                 </p>
                             </div>
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
         </div>
     );

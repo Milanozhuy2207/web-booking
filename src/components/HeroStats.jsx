@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { FiFilter, FiSearch, FiX } from 'react-icons/fi';
 import { useCart } from './CartContext';
+import { groupsData } from '../data/mockData';
 
 const HeroStats = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,10 +14,29 @@ const HeroStats = () => {
     } = useCart();
 
     const stats = useMemo(() => {
+        // We can get groupsData from the hook if it's exposed, 
+        // but it's easier to just calculate from the source of truth
+        const parseFollowers = (val) => {
+            if (typeof val !== 'string') return 0;
+            const num = parseFloat(val.replace(',', '.'));
+            if (val.toUpperCase().includes('M') || val.includes('triệu')) return num * 1000000;
+            if (val.toUpperCase().includes('K')) return num * 1000;
+            return num;
+        };
+
+        const totalFollowers = groupsData.reduce((acc, curr) => acc + parseFollowers(curr.followers), 0);
+        const formatFollowers = (num) => {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(0) + 'K';
+            return num.toString();
+        };
+
+        const uniqueTopics = new Set(groupsData.map(item => item.category)).size;
+
         return [
-            { label: 'SỐ KÊNH', value: '395' },
-            { label: 'FOLLOWERS', value: '317.6M' },
-            { label: 'NGÀNH NGHỀ', value: '17' }
+            { label: 'SỐ KÊNH', value: groupsData.length.toString() },
+            { label: 'FOLLOWERS', value: formatFollowers(totalFollowers) },
+            { label: 'NGÀNH NGHỀ', value: uniqueTopics.toString() }
         ];
     }, []);
 
@@ -59,14 +79,14 @@ const HeroStats = () => {
                                 placeholder="Tìm Kênh theo tên..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full bg-white/20 border border-white/10 text-white text-xs md:text-base font-bold py-4 md:py-5 px-6 rounded-[20px] md:rounded-3xl focus:outline-none focus:bg-white/30 transition-all placeholder:text-white/60 text-center"
+                                className="w-full bg-white/20 border border-white/10 text-white text-xs md:text-base font-bold py-4 md:py-5 px-6 rounded-[20px] md:rounded-3xl focus:outline-none focus:bg-white/30 transition-all placeholder:text-white/60 text-left"
                             />
                         </div>
 
                         {/* Filter Button - White background, red text */}
                         <button 
                             onClick={() => setIsModalOpen(true)}
-                            className="w-full md:w-auto bg-white text-[#E10600] hover:bg-gray-100 px-10 py-4 md:py-5 rounded-[20px] md:rounded-3xl font-black text-xs md:text-sm transition-all uppercase tracking-widest shadow-2xl flex items-center justify-center gap-3 whitespace-nowrap active:scale-95"
+                            className="w-full md:w-auto bg-white text-[#E10600] hover:bg-gray-100 px-10 py-4 md:py-5 rounded-[20px] md:rounded-3xl font-black text-xs md:text-sm transition-all uppercase tracking-widest shadow-2xl flex items-center justify-center gap-3 whitespace-nowrap active:scale-95 cursor-pointer"
                         >
                             <FiFilter size={18} />
                             LỌC NÂNG CAO

@@ -5,7 +5,7 @@ import { useCart } from './CartContext';
 import logo from '../assets/logo.png';
 
 const Navbar = () => {
-    const { cartItems, setIsCartOpen, isDarkMode, toggleTheme } = useCart();
+    const { cartItems, isDarkMode, toggleTheme } = useCart();
     const [isScrolled, setIsScrolled] = React.useState(false);
     const location = useLocation();
 

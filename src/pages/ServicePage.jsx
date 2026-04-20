@@ -1,6 +1,7 @@
 import React from 'react';
 import { FiCheckCircle } from 'react-icons/fi';
 import { useCart } from '../components/CartContext';
+import logo from '../assets/logo.png';
 
 const ServicePage = () => {
     const { addToCart, cartItems } = useCart();
@@ -11,7 +12,7 @@ const ServicePage = () => {
             name: "VenKheo BUZZ",
             title: "VenKheo BUZZ",
             platform: "Dịch vụ",
-            image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=400&h=200",
+            image: logo,
             subtitle: "KHỞI ĐỘNG",
             mainGoal: "Kích hoạt thảo luận ban đầu",
             features: [
@@ -30,7 +31,7 @@ const ServicePage = () => {
             name: "VenKheo PRO",
             title: "VenKheo PRO",
             platform: "Dịch vụ",
-            image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=400&h=200",
+            image: logo,
             subtitle: "KHUẾCH ĐẠI",
             mainGoal: "Tăng uy tín & độ phủ",
             features: [
@@ -49,7 +50,7 @@ const ServicePage = () => {
             name: "VenKheo PARTNER",
             title: "VenKheo PARTNER",
             platform: "Dịch vụ",
-            image: "https://images.unsplash.com/photo-1556761175-5973dc0f32b7?auto=format&fit=crop&q=80&w=400&h=200",
+            image: logo,
             subtitle: "ĐỒNG HÀNH",
             mainGoal: "Xây dựng ảnh hưởng dài hạn",
             features: [
