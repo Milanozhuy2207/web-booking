@@ -5,6 +5,7 @@ import { groupsData } from '../data/mockData';
 
 const HeroStats = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isTopicModalOpen, setIsTopicModalOpen] = useState(false);
     const { 
         selectedCategory, setSelectedCategory,
         followerRange, setFollowerRange,
@@ -36,7 +37,7 @@ const HeroStats = () => {
         return [
             { label: 'SỐ KÊNH', value: groupsData.length.toString() },
             { label: 'FOLLOWERS', value: formatFollowers(totalFollowers) },
-            { label: 'NGÀNH NGHỀ', value: uniqueTopics.toString() }
+            { label: 'NGÀNH NGHỀ', value: uniqueTopics.toString(), isTopic: true }
         ];
     }, []);
 
@@ -59,9 +60,13 @@ const HeroStats = () => {
                     {/* Stats Row - 3 Boxes - Adjusted for Mobile Layout in screenshot */}
                     <div className="grid grid-cols-3 gap-2 md:gap-8 w-full max-w-6xl mb-8 md:mb-12">
                         {stats.map((stat, index) => (
-                            <div key={index} className="bg-white/10 backdrop-blur-md border border-white/10 rounded-[20px] md:rounded-[40px] p-3 md:p-10 flex flex-col items-center justify-center transition-all duration-300 hover:scale-110 hover:bg-white/20 cursor-pointer shadow-lg">
+                            <div 
+                                key={index} 
+                                onClick={() => stat.isTopic ? setIsTopicModalOpen(true) : null}
+                                className="bg-white/10 backdrop-blur-md border border-white/10 rounded-[20px] md:rounded-[40px] p-3 md:p-10 flex flex-col items-center justify-center transition-all duration-300 hover:scale-110 hover:bg-white/20 cursor-pointer shadow-lg"
+                            >
                                 <p className="text-white text-[7px] md:text-xs font-black tracking-widest uppercase mb-1 md:mb-2 opacity-90 flex items-center gap-1 whitespace-nowrap">
-                                    {stat.label} {stat.label === 'NGÀNH NGHỀ' && <span className="text-[6px] md:text-[10px]">▼</span>}
+                                    {stat.label} {stat.isTopic && <span className="text-[6px] md:text-[10px]">▼</span>}
                                 </p>
                                 <p className="text-white text-base md:text-7xl font-black tracking-tighter drop-shadow-md">
                                     {stat.value}
@@ -102,6 +107,46 @@ const HeroStats = () => {
                 </div>
             </div>
 
+            {/* Topic Modal */}
+            {isTopicModalOpen && (
+                <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-black/90 backdrop-blur-md" onClick={() => setIsTopicModalOpen(false)} />
+                    <div className="relative bg-[#151a28] border border-white/10 w-full max-w-2xl rounded-[40px] p-8 md:p-12 shadow-3xl">
+                        <div className="flex justify-between items-center mb-10">
+                            <div>
+                                <h3 className="text-white text-3xl font-black uppercase tracking-tight">Chọn Ngành Nghề</h3>
+                                <p className="text-[#E10600] text-xs font-black uppercase tracking-widest mt-1">Khám phá cộng đồng theo chủ đề</p>
+                            </div>
+                            <button onClick={() => setIsTopicModalOpen(false)} className="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 text-gray-400 hover:bg-[#E10600] hover:text-white transition-all">
+                                <FiX size={20} />
+                            </button>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
+                            {categories.map(opt => (
+                                <button 
+                                    key={opt} 
+                                    onClick={() => {
+                                        setSelectedCategory(opt);
+                                        setIsTopicModalOpen(false);
+                                    }} 
+                                    className={`group flex items-center justify-between py-6 px-8 rounded-[30px] text-sm font-black uppercase tracking-widest transition-all border ${selectedCategory === opt ? 'bg-[#E10600] border-[#E10600] text-white shadow-xl' : 'bg-white/5 border-white/5 text-gray-400 hover:border-[#E10600]/50 hover:text-white'}`}
+                                >
+                                    <span>{opt === 'All' ? 'Tất cả chủ đề' : opt}</span>
+                                    <div className={`w-2 h-2 rounded-full transition-all ${selectedCategory === opt ? 'bg-white scale-150' : 'bg-gray-700 group-hover:bg-[#E10600]'}`}></div>
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className="mt-10 p-6 bg-black/40 rounded-3xl border border-white/5">
+                            <p className="text-gray-500 text-[10px] font-bold uppercase tracking-[0.2em] leading-relaxed italic">
+                                * Lựa chọn ngành nghề giúp hệ thống hiển thị chính xác các cộng đồng phù hợp với mục tiêu truyền thông của doanh nghiệp.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Advanced Filter Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -117,16 +162,6 @@ const HeroStats = () => {
                             </button>
                         </div>
                         <div className="space-y-8 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
-                            <div>
-                                <label className="text-white text-[10px] font-black uppercase tracking-[0.2em] mb-4 block opacity-50">Lĩnh vực cộng đồng</label>
-                                <div className="grid grid-cols-2 gap-3">
-                                    {categories.map(opt => (
-                                        <button key={opt} onClick={() => setSelectedCategory(opt)} className={`py-4 px-2 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border ${selectedCategory === opt ? 'bg-[#E10600] border-[#E10600] text-white shadow-lg shadow-[#E10600]/20' : 'bg-white/5 border-white/5 text-gray-400 hover:border-white/20'}`}>
-                                            {opt === 'All' ? 'Tất cả chủ đề' : opt}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
                             <div>
                                 <label className="text-white text-[10px] font-black uppercase tracking-[0.2em] mb-4 block opacity-50">Lượt theo dõi / Thành viên</label>
                                 <div className="grid grid-cols-2 gap-3">
