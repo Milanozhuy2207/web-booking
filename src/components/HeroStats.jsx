@@ -11,12 +11,11 @@ const HeroStats = () => {
         followerRange, setFollowerRange,
         budgetRange, setBudgetRange,
         categories, followerOptions, budgetOptions,
-        searchTerm, setSearchTerm
+        searchTerm, setSearchTerm,
+        filteredData
     } = useCart();
 
     const stats = useMemo(() => {
-        // We can get groupsData from the hook if it's exposed, 
-        // but it's easier to just calculate from the source of truth
         const parseFollowers = (val) => {
             if (typeof val !== 'string') return 0;
             const num = parseFloat(val.replace(',', '.'));
@@ -25,7 +24,7 @@ const HeroStats = () => {
             return num;
         };
 
-        const totalFollowers = groupsData.reduce((acc, curr) => acc + parseFollowers(curr.followers), 0);
+        const totalFollowers = filteredData.reduce((acc, curr) => acc + parseFollowers(curr.followers), 0);
         const formatFollowers = (num) => {
             if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
             if (num >= 1000) return (num / 1000).toFixed(0) + 'K';
@@ -35,11 +34,11 @@ const HeroStats = () => {
         const uniqueTopics = new Set(groupsData.map(item => item.category)).size;
 
         return [
-            { label: 'SỐ KÊNH', value: groupsData.length.toString() },
+            { label: 'SỐ KÊNH', value: filteredData.length.toString() },
             { label: 'FOLLOWERS', value: formatFollowers(totalFollowers) },
             { label: 'NGÀNH NGHỀ', value: uniqueTopics.toString(), isTopic: true }
         ];
-    }, []);
+    }, [filteredData]);
 
     return (
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 pt-8 pb-8 font-sans transition-colors duration-300">

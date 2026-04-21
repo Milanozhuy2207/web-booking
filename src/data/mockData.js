@@ -1130,7 +1130,7 @@ export const groupsData = [
   {
     "id": 95,
     "name": "Hội phụ huynh thành phố Hà Nội",
-    "category": "Gia đình & Nuôi dạy con cái",
+    "category": "Hội Phụ Huynh",
     "platform": "Facebook",
     "link": "https://www.facebook.com/groups/1019040689567650",
     "description": "Hội phụ huynh thành phố Hà Nội",
@@ -1138,5 +1138,17 @@ export const groupsData = [
     "price": 2000000,
     "followers": "385k",
     "image": "https://scontent.fhph1-3.fna.fbcdn.net/v/t39.30808-6/510759867_122159927354529024_8293708532118132975_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=25d718&_nc_ohc=ucKuzPRKpv4Q7kNvwGC13GI&_nc_oc=AdpgAJ-dTJ1SrdudmGuqHOAzuM7HMUI-ck2P21AMvkX8DElDMm47tDMF83Fm-qoGLss&_nc_zt=23&_nc_ht=scontent.fhph1-3.fna&_nc_gid=RwDGhi4Uloflpe9QXvFDZQ&_nc_ss=7a3a8&oh=00_Af1h5XeCJTuNL29Z4qgLfTPAsdZ-4cobM6H43hLFbt8Dtg&oe=69ECAF8B"
+  },
+  {
+    "id": 96,
+    "name": "REVIEW CÁC TRƯỜNG MẦM NON VÀ TIỂU HỌC TẠI HÀ NỘI",
+    "category": "Hội Phụ Huynh",
+    "platform": "Facebook",
+    "link": "https://www.facebook.com/groups/304464055591188",
+    "description": "REVIEW CÁC TRƯỜNG MẦM NON VÀ TIỂU HỌC TẠI HÀ NỘI",
+    "bookingPrice": "2.000.000 ₫",
+    "price": 2000000,
+    "followers": "299k",
+    "image": "https://scontent.fhph1-2.fna.fbcdn.net/v/t39.30808-6/674877616_122171134862839541_3326985798941992400_n.png?stp=dst-jpg_tt6&_nc_cat=110&ccb=1-7&_nc_sid=25d718&_nc_ohc=pNPCIQ3ga6cQ7kNvwHc7mPx&_nc_oc=AdoJ6-byrfq8C8iucUlXtt8Vcf689yhIJvCE7WzjqPDXJonvIe-C7Z6nDyrM-EgRfXY&_nc_zt=23&_nc_ht=scontent.fhph1-2.fna&_nc_gid=NtVasLsKlZucF0bQ4bzhbA&_nc_ss=7a3a8&oh=00_Af22wD_zoAsP5BejaZU6sumWT5XsEgv-6zX19_0YjCx2Ag&oe=69ED170F"
   }
 ];

@@ -16,10 +16,15 @@ const ZaloChat = () => {
           className="w-14 h-14 md:w-16 md:h-16 relative z-10 drop-shadow-lg transform hover:scale-110 transition-transform duration-300"
         />
       </a>
-      {/* Tooltip or Label if needed */}
-      <span className="hidden group-hover:block absolute right-full mr-4 bg-white text-blue-600 px-3 py-1 rounded-lg shadow-md text-sm font-semibold whitespace-nowrap border border-blue-100">
-        Chat với chúng tôi
-      </span>
+      {/* Tooltips stacked correctly */}
+      <div className="hidden group-hover:flex flex-col items-end absolute right-full mr-4 gap-2 transition-all duration-300">
+        <span className="bg-white text-blue-600 px-3 py-1.5 rounded-xl shadow-xl text-[10px] font-black whitespace-nowrap border border-blue-50 uppercase tracking-widest">
+          Chat với chúng tôi
+        </span>
+        <span className="bg-[#E10600] text-white px-3 py-1.5 rounded-xl shadow-xl text-[10px] font-black whitespace-nowrap border border-red-500/20 tracking-widest">
+          HOTLINE: 0962500719
+        </span>
+      </div>
     </div>
   );
 };
