@@ -2,7 +2,7 @@ import React from 'react';
 
 const ZaloChat = () => {
   return (
-    <div className="fixed bottom-24 right-6 z-[9999] md:bottom-10 md:right-10 flex flex-col items-center gap-4 animate-bounce hover:animate-none transition-all duration-300 group">
+    <div className="fixed bottom-24 right-6 z-9999 md:bottom-10 md:right-10 flex flex-col items-center gap-4 animate-bounce hover:animate-none transition-all duration-300 group">
       <a 
         href="https://zalo.me/0962500719" 
         target="_blank" 
