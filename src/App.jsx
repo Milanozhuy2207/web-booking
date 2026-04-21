@@ -9,6 +9,7 @@ import ServicePage from './pages/ServicePage';
 import CartDetail from './pages/CartDetail';
 import MobileNavbar from './components/MobileNavbar';
 import Notification from './components/Notification';
+import ZaloChat from './components/ZaloChat';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/services" element={<ServicePage />} />
             <Route path="/cart" element={<CartDetail />} />
           </Routes>
+          <ZaloChat />
           <MobileNavbar />
         </div>
       </Router>
