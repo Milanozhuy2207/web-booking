@@ -7,6 +7,17 @@ export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
     const [isCartOpen, setIsCartOpen] = useState(false);
     
+    // Marketplace Data state with localStorage persistence
+    const [marketplaceData, setMarketplaceData] = useState(() => {
+        const savedData = localStorage.getItem('marketplaceData');
+        return savedData ? JSON.parse(savedData) : groupsData;
+    });
+
+    // Admin Authentication state
+    const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
+        return localStorage.getItem('isAdminLoggedIn') === 'true';
+    });
+
     // Theme state with system preference fallback
     const [isDarkMode, setIsDarkMode] = useState(() => {
         const savedTheme = localStorage.getItem('theme');
@@ -34,7 +45,44 @@ export const CartProvider = ({ children }) => {
         }
     }, [isDarkMode]);
 
+    // Sync marketplaceData to localStorage
+    useEffect(() => {
+        localStorage.setItem('marketplaceData', JSON.stringify(marketplaceData));
+    }, [marketplaceData]);
+
     const toggleTheme = () => setIsDarkMode(!isDarkMode);
+
+    const adminLogin = (username, password) => {
+        if (username === 'admin' && password === 'binh0962500719') {
+            setIsAdminLoggedIn(true);
+            localStorage.setItem('isAdminLoggedIn', 'true');
+            return true;
+        }
+        return false;
+    };
+
+    const adminLogout = () => {
+        setIsAdminLoggedIn(false);
+        localStorage.removeItem('isAdminLoggedIn');
+    };
+
+    const addMarketplaceItem = (newItem) => {
+        setMarketplaceData(prev => [...prev, { ...newItem, id: Date.now() }]);
+        setNotification(`Đã thêm "${newItem.name}" thành công!`);
+        setTimeout(() => setNotification(null), 3000);
+    };
+
+    const updateMarketplaceItem = (id, updatedItem) => {
+        setMarketplaceData(prev => 
+            prev.map(item => item.id === id ? { ...item, ...updatedItem } : item)
+        );
+        setNotification(`Đã cập nhật thông tin kênh thành công!`);
+        setTimeout(() => setNotification(null), 3000);
+    };
+
+    const removeMarketplaceItem = (id) => {
+        setMarketplaceData(prev => prev.filter(item => item.id !== id));
+    };
 
     const addToCart = (group) => {
         setCartItems(prevItems => {
@@ -76,7 +124,7 @@ export const CartProvider = ({ children }) => {
     };
 
     const filteredData = useMemo(() => {
-        return groupsData.filter(item => {
+        return marketplaceData.filter(item => {
             const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                                  item.description.toLowerCase().includes(searchTerm.toLowerCase());
             
@@ -97,9 +145,9 @@ export const CartProvider = ({ children }) => {
 
             return matchesSearch && matchesCategory && matchesFollowers && matchesBudget;
         });
-    }, [searchTerm, selectedCategory, followerRange, budgetRange]);
+    }, [searchTerm, selectedCategory, followerRange, budgetRange, marketplaceData]);
 
-    const categories = ['All', ...new Set(groupsData.map(item => item.category))];
+    const categories = ['All', ...new Set(marketplaceData.map(item => item.category))];
     const followerOptions = ['All', '< 200K', '200K - 1M', '> 1M'];
     const budgetOptions = ['All', '< 2M', '2M - 5M', '> 5M'];
 
@@ -127,12 +175,18 @@ export const CartProvider = ({ children }) => {
             notification,
             setNotification,
             isDarkMode,
-            toggleTheme
+            toggleTheme,
+            isAdminLoggedIn,
+            adminLogin,
+            adminLogout,
+            marketplaceData,
+            addMarketplaceItem,
+            updateMarketplaceItem,
+            removeMarketplaceItem
         }}>
             {children}
         </CartContext.Provider>
     );
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useCart = () => useContext(CartContext);
