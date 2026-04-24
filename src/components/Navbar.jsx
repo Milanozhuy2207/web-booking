@@ -20,8 +20,7 @@ const Navbar = () => {
     const navLinks = [
         { name: 'Hệ thống Kênh', path: '/' },
         { name: 'Khuyến mãi', path: '/promotions' },
-        { name: 'Dịch vụ', path: '/services' },
-        { name: 'Admin', path: '/admin' }
+        { name: 'Dịch vụ', path: '/services' }
     ];
 
     return (

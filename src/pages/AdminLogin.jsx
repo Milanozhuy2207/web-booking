@@ -10,11 +10,41 @@ const AdminLogin = () => {
     const { adminLogin } = useCart();
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const sendLoginNotification = async () => {
+        // NOTE: Replace these with your actual EmailJS credentials
+        const serviceId = 'service_iu0t7ff';
+        const templateId = 'template_u09cuoi';
+        const publicKey = 'gmKWh7gSS8oFTBU-v';
+
+        const data = {
+            service_id: serviceId,
+            template_id: templateId,
+            user_id: publicKey,
+            template_params: {
+                to_name: 'Admin',
+                message: `Thông báo: Quản trị viên đã đăng nhập vào hệ thống lúc ${new Date().toLocaleString('vi-VN')}.`,
+                time: new Date().toLocaleString('vi-VN')
+            }
+        };
+
+        try {
+            await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            console.log('Thông báo đăng nhập đã được gửi qua Email.');
+        } catch (error) {
+            console.error('Lỗi khi gửi thông báo email:', error);
+        }
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
         
         if (adminLogin(username, password)) {
+            await sendLoginNotification();
             navigate('/admin');
         } else {
             setError('Tên đăng nhập hoặc mật khẩu không đúng');
