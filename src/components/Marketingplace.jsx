@@ -19,20 +19,23 @@ const Marketplace = () => {
         const observer = new IntersectionObserver(
             (entries) => {
                 if (entries[0].isIntersecting && visibleCount < filteredData.length) {
-                    // Small delay to simulate loading feel if desired, or just update
                     setVisibleCount(prev => prev + 8);
                 }
             },
-            { threshold: 1.0 }
+            { 
+                threshold: 0.1,
+                rootMargin: '100px' 
+            }
         );
 
-        if (loaderRef.current) {
-            observer.observe(loaderRef.current);
+        const currentLoader = loaderRef.current;
+        if (currentLoader) {
+            observer.observe(currentLoader);
         }
 
         return () => {
-            if (loaderRef.current) {
-                observer.unobserve(loaderRef.current);
+            if (currentLoader) {
+                observer.unobserve(currentLoader);
             }
         };
     }, [visibleCount, filteredData.length]);
