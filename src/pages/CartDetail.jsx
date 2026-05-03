@@ -10,7 +10,7 @@ const CartDetail = () => {
 
     const subTotal = cartItems.reduce((total, item) => total + ((item.price || 0) * (item.quantity || 1)), 0)
     
-    const getDiscountPercent = (count) => {
+    const getDiscountPercent = () => {
         // count here could be total number of items or total quantity. 
         // Based on PromotionPage, it seems to be "BÀI" (posts/items).
         const totalItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);

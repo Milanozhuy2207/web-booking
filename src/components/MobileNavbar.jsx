@@ -9,7 +9,7 @@ const MobileNavbar = () => {
         { name: 'KOLS', icon: <FiSearch size={24} />, path: '/' },
         { name: 'SALE', icon: <FiPercent size={24} />, path: '/promotions' },
         { name: 'GBUZZ', icon: <FiLayers size={24} />, path: '/services' },
-        { name: 'GIỎ', icon: <FiShoppingCart size={24} />, path: '#cart' },
+        { name: 'GIỎ', icon: <FiShoppingCart size={24} />, path: '/cart' },
     ];
 
     return (
@@ -18,7 +18,7 @@ const MobileNavbar = () => {
                 {tabs.map((tab) => (
                     <Link
                         key={tab.name}
-                        to={tab.path === '#cart' ? '#' : tab.path}
+                        to={tab.path}
                         className={`flex flex-col items-center gap-1 min-w-[64px] transition-colors ${
                             location.pathname === tab.path 
                             ? 'text-[#E10600]' 

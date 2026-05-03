@@ -10,9 +10,9 @@ const Marketplace = () => {
     const loaderRef = useRef(null);
 
     // Reset visible count when any filter changes
-    useEffect(() => {
-        setVisibleCount(12);
-    }, [searchTerm, selectedCategory, followerRange, budgetRange]);
+    // useEffect(() => {
+    //     setVisibleCount(12);
+    // }, [searchTerm, selectedCategory, followerRange, budgetRange]);
 
     // Intersection Observer to detect when user reaches bottom
     useEffect(() => {

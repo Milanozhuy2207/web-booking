@@ -993,7 +993,7 @@ export const groupsData = [
     "bookingPrice": "500.000 ₫",
     "price": 500000,
     "followers": "35K",
-    "image": ""
+    "image": "/groups/dakhoa-khanhhoa.jpg"
   },
   {
     "id": 83,
@@ -1005,7 +1005,7 @@ export const groupsData = [
     "bookingPrice": "500.000 ₫",
     "price": 500000,
     "followers": "44K",
-    "image": ""
+    "image": "/groups/sannhi-longan.jpg"
   },
   {
     "id": 84,
@@ -1017,7 +1017,7 @@ export const groupsData = [
     "bookingPrice": "500.000 ₫",
     "price": 500000,
     "followers": "34K",
-    "image": ""
+    "image": "/groups/sannhi-quangngai.jpg"
   },
   {
     "id": 85,
@@ -1029,7 +1029,7 @@ export const groupsData = [
     "bookingPrice": "500.000 ₫",
     "price": 500000,
     "followers": "36K",
-    "image": ""
+    "image": "/groups/sannhi-kiengiang.jpg"
   },
   {
     "id": 86,
@@ -1041,7 +1041,7 @@ export const groupsData = [
     "bookingPrice": "500.000 ₫",
     "price": 500000,
     "followers": "80K",
-    "image": ""
+    "image": "/groups/benhvien-dongnai.jpg"
   },
   {
     "id": 87,
@@ -1053,7 +1053,7 @@ export const groupsData = [
     "bookingPrice": "500.000 ₫",
     "price": 500000,
     "followers": "24K",
-    "image": ""
+    "image": "/groups/dakhoa-tayninh.jpg"
   },
   {
     "id": 88,
@@ -1065,7 +1065,7 @@ export const groupsData = [
     "bookingPrice": "500.000 ₫",
     "price": 500000,
     "followers": "37K",
-    "image": ""
+    "image": "/groups/sannhi-camau.jpg"
   },
   {
     "id": 89,
@@ -1077,7 +1077,7 @@ export const groupsData = [
     "bookingPrice": "500.000 ₫",
     "price": 500000,
     "followers": "44K",
-    "image": ""
+    "image": "/groups/diung-suabo.jpg"
   },
   {
     "id": 90,
@@ -1089,7 +1089,7 @@ export const groupsData = [
     "bookingPrice": "500.000 ₫",
     "price": 500000,
     "followers": "43K",
-    "image": ""
+    "image": "/groups/diung-lactose.jpg"
   },
   {
     "id": 91,
@@ -1101,7 +1101,7 @@ export const groupsData = [
     "bookingPrice": "500.000 ₫",
     "price": 500000,
     "followers": "45K",
-    "image": ""
+    "image": "/groups/sua-chinhhang.jpg"
   },
   {
     "id": 92,
@@ -1113,7 +1113,7 @@ export const groupsData = [
     "bookingPrice": "500.000 ₫",
     "price": 500000,
     "followers": "21K",
-    "image": ""
+    "image": "/groups/kinhnghiem-diungbo.jpg"
   },
   {
     "id": 93,
@@ -1125,7 +1125,7 @@ export const groupsData = [
     "bookingPrice": "500.000 ₫",
     "price": 500000,
     "followers": "43K",
-    "image": ""
+    "image": "/groups/diungbo-viemda.jpg"
   },
   {
     "id": 95,
@@ -1137,7 +1137,7 @@ export const groupsData = [
     "bookingPrice": "2.000.000 ₫",
     "price": 2000000,
     "followers": "385k",
-    "image": ""
+    "image": "/groups/hoiphuhuynh-hanoi.jpg"
   },
   {
     "id": 96,
@@ -1149,6 +1149,6 @@ export const groupsData = [
     "bookingPrice": "2.000.000 ₫",
     "price": 2000000,
     "followers": "299k",
-    "image": ""
+    "image": "/groups/review-truong-hanoi.jpg"
   }
 ];
