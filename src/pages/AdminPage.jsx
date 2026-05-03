@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useCart } from '../components/CartContext';
+import { useCart } from '../components/CartContextInstance';
 import { FiPlus, FiTrash2, FiExternalLink, FiImage, FiSearch, FiFilter, FiEdit2, FiX } from 'react-icons/fi';
 
 const AdminPage = () => {

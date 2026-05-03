@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCart } from './CartContext';
+import { useCart } from './CartContextInstance';
 import { FiCheckCircle, FiInfo } from 'react-icons/fi';
 
 const Notification = () => {

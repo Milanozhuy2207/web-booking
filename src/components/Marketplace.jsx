@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useCart } from './CartContext';
+import { useCart } from './CartContextInstance';
 import { FiPlus, FiUsers, FiTrendingUp } from 'react-icons/fi';
 
 const Marketplace = () => {

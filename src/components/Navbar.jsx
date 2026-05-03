@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FiShoppingCart, FiSun, FiMoon } from 'react-icons/fi';
-import { useCart } from './CartContext';
+import { useCart } from './CartContextInstance';
 import logo from '../assets/logo.png';
 
 const Navbar = () => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCart } from "../components/CartContext"
+import { useCart } from "../components/CartContextInstance"
 import { FiTrash2, FiShoppingCart, FiArrowLeft, FiPlus, FiMinus } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import jsPDF from 'jspdf';

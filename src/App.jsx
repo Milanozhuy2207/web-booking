@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import { CartProvider, useCart } from './components/CartContext';
+import { CartProvider } from './components/CartContext';
+import { useCart } from './components/CartContextInstance';
 import HomePage from './pages/HomePage';
 import PromotionPage from './pages/PromotionPage';
 import ServicePage from './pages/ServicePage';

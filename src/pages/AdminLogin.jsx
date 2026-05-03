@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useCart } from '../components/CartContext';
+import { useCart } from '../components/CartContextInstance';
 import { useNavigate } from 'react-router-dom';
 import { FiLock, FiUser, FiAlertCircle } from 'react-icons/fi';
 

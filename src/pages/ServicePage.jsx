@@ -1,6 +1,6 @@
 import React from 'react';
 import { FiCheckCircle } from 'react-icons/fi';
-import { useCart } from '../components/CartContext';
+import { useCart } from '../components/CartContextInstance';
 import logo from '../assets/logo.png';
 
 const ServicePage = () => {

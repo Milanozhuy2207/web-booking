@@ -189,7 +189,7 @@ export const groupsData = [
     "bookingPrice": "1.000.000 ₫",
     "price": 1000000,
     "followers": "128K",
-    "image": "/groups/landaulaume.jpg"
+    "image": "/groups/landaulamme.jpg"
   },
   {
     "id": 16,

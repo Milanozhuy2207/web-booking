@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { FiFilter, FiSearch, FiX } from 'react-icons/fi';
-import { useCart } from './CartContext';
+import { useCart } from './CartContextInstance';
 import { groupsData } from '../data/mockData';
 
 const HeroStats = () => {

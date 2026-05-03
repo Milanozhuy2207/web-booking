@@ -1,6 +1,6 @@
 import React from 'react';
 import { FiFilter, FiChevronDown, FiSearch } from 'react-icons/fi';
-import { useCart } from './CartContext';
+import { useCart } from './CartContextInstance';
 
 const FilterBar = () => {
     const { 

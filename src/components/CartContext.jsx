@@ -1,7 +1,6 @@
-import React, { createContext, useState, useContext, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { groupsData } from '../data/mockData';
-
-const CartContext = createContext();
+import { CartContext } from './CartContextInstance';
 
 export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
@@ -188,5 +187,3 @@ export const CartProvider = ({ children }) => {
         </CartContext.Provider>
     );
 };
-
-export const useCart = () => useContext(CartContext);

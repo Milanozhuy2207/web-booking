@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useCart } from '../components/CartContext';
+import { useCart } from '../components/CartContextInstance';
 import { FiGrid, FiList, FiSettings, FiLogOut, FiMenu, FiX, FiExternalLink, FiSun, FiMoon } from 'react-icons/fi';
 
 const AdminLayout = ({ children }) => {

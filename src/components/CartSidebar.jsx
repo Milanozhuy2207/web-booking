@@ -1,4 +1,4 @@
-import { useCart } from "./CartContext"
+import { useCart } from "./CartContextInstance"
 import { FiX, FiTrash2, FiShoppingCart } from 'react-icons/fi';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
