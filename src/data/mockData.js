@@ -9,7 +9,7 @@ export const groupsData = [
     "bookingPrice": "8.000.000 ₫",
     "price": 8000000,
     "followers": "1.7M",
-    "image": "/groups/venkheo.jpg"
+    "image": "/groups/veokheo.jpg"
   },
   {
     "id": 2,
@@ -57,7 +57,7 @@ export const groupsData = [
     "bookingPrice": "2.000.000 ₫",
     "price": 2000000,
     "followers": "324K",
-    "image": "/groups/reviewthe.jpg"
+    "image": "/groups/reviewte.jpg"
   },
   {
     "id": 5,
