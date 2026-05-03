@@ -6,7 +6,7 @@ import autoTable from 'jspdf-autotable';
 const CartSidebar = () => {
     const { cartItems, isCartOpen, setIsCartOpen, removeFromCart, clearCart } = useCart()
 
-    const subTotal = cartItems.reduce((total, item) => total + (item.price || 0), 0)
+    const subTotal = cartItems.reduce((total, item) => total + ((item.price || 0) * (item.quantity || 1)), 0)
     
     const getDiscountPercent = (count) => {
         if (count >= 2 && count <= 5) return 0.1;

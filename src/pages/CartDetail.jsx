@@ -189,7 +189,15 @@ const CartDetail = () => {
                                 <div key={item.id} className="bg-theme-secondary p-4 md:p-6 rounded-[24px] border border-theme flex flex-col md:flex-row justify-between items-center gap-4 transition-all hover:border-[#E10600]/30 shadow-sm group">
                                     <div className="flex items-center gap-4 w-full md:w-auto">
                                         <div className="h-16 w-16 rounded-xl overflow-hidden bg-theme-primary shrink-0">
-                                            <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
+                                            <img 
+                                                src={item.image || '/favicon.svg'} 
+                                                alt={item.name} 
+                                                className="h-full w-full object-cover"
+                                                onError={(e) => {
+                                                    e.target.src = '/favicon.svg';
+                                                    e.target.className = "h-full w-full object-contain p-2 opacity-20";
+                                                }}
+                                            />
                                         </div>
                                         <div className="flex-1">
                                             <span className="text-[#E10600] text-[10px] font-black uppercase tracking-widest">{item.platform}</span>

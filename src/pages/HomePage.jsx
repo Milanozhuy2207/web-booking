@@ -1,6 +1,6 @@
 import React from 'react';
 import HeroStats from '../components/HeroStats';
-import Marketplace from '../components/Marketingplace';
+import Marketplace from '../components/Marketplace';
 
 const HomePage = () => {
     return (

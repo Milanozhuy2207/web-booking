@@ -80,8 +80,12 @@ const Marketplace = () => {
                                 <div className="relative h-32 md:h-48 w-full bg-theme-secondary overflow-hidden p-2 pointer-events-none">
                                     <div className="w-full h-full rounded-2xl overflow-hidden relative">
                                         <img
-                                            src={group.image}
+                                            src={group.image || '/favicon.svg'}
                                             alt={group.name}
+                                            onError={(e) => {
+                                                e.target.src = '/favicon.svg';
+                                                e.target.className = "w-full h-full object-contain p-8 opacity-20 group-hover:scale-110 transition-transform duration-700";
+                                            }}
                                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                         />
                                         {/* Overlay Gradient */}

@@ -9,8 +9,8 @@ export const groupsData = [
     "bookingPrice": "8.000.000 ₫",
     "price": 8000000,
     "followers": "1.7M",
-    "image": "/groups/veokheo.jpg"
-  },
+    "image": "/groups/venkheo.jpg"
+    },
   {
     "id": 2,
     "name": "Liệu cơm gắp mắm",
