@@ -57,7 +57,7 @@ export const groupsData = [
     "bookingPrice": "2.000.000 ₫",
     "price": 2000000,
     "followers": "324K",
-    "image": "/groups/reviewte.jpg"
+    "image": "/groups/reviewthe.jpg"
   },
   {
     "id": 5,
