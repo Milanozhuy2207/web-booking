@@ -5,7 +5,7 @@ import { CartContext } from './CartContextInstance';
 export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
     const [isCartOpen, setIsCartOpen] = useState(false);
-    
+
     // Marketplace Data state with localStorage persistence
     const [marketplaceData, setMarketplaceData] = useState(() => {
         const savedData = localStorage.getItem('marketplaceData');
@@ -72,7 +72,7 @@ export const CartProvider = ({ children }) => {
     };
 
     const updateMarketplaceItem = (id, updatedItem) => {
-        setMarketplaceData(prev => 
+        setMarketplaceData(prev =>
             prev.map(item => item.id === id ? { ...item, ...updatedItem } : item)
         );
         setNotification(`Đã cập nhật thông tin kênh thành công!`);
@@ -89,7 +89,7 @@ export const CartProvider = ({ children }) => {
             if (existingItem) {
                 setNotification(`Đã tăng số lượng "${group.name}" trong giỏ hàng!`);
                 setTimeout(() => setNotification(null), 3000);
-                return prevItems.map(item => 
+                return prevItems.map(item =>
                     item.id === group.id ? { ...item, quantity: (item.quantity || 1) + 1 } : item
                 );
             }
@@ -101,7 +101,7 @@ export const CartProvider = ({ children }) => {
 
     const updateQuantity = (id, newQuantity) => {
         if (newQuantity < 1) return;
-        setCartItems(prevItems => 
+        setCartItems(prevItems =>
             prevItems.map(item => item.id === id ? { ...item, quantity: newQuantity } : item)
         );
     };
@@ -124,11 +124,11 @@ export const CartProvider = ({ children }) => {
 
     const filteredData = useMemo(() => {
         return marketplaceData.filter(item => {
-            const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                                 item.description.toLowerCase().includes(searchTerm.toLowerCase());
-            
+            const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.description.toLowerCase().includes(searchTerm.toLowerCase());
+
             const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
-            
+
             // Follower filtering
             const followers = parseFollowers(item.followers);
             let matchesFollowers = true;
@@ -151,11 +151,11 @@ export const CartProvider = ({ children }) => {
     const budgetOptions = ['All', '< 2M', '2M - 5M', '> 5M'];
 
     return (
-        <CartContext.Provider value={{ 
-            cartItems, 
-            isCartOpen, 
-            setIsCartOpen, 
-            addToCart, 
+        <CartContext.Provider value={{
+            cartItems,
+            isCartOpen,
+            setIsCartOpen,
+            addToCart,
             removeFromCart,
             updateQuantity,
             clearCart,

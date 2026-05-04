@@ -74,6 +74,7 @@ const CartSidebar = () => {
         doc.setTextColor(100);
         doc.text(`Ma bao gia: VK-${new Date().getTime().toString().slice(-6)}`, 20, 62);
         doc.text(`Ngay lap: ${new Date().toLocaleDateString('vi-VN')}`, 20, 67);
+        // eslint-disable-next-line react-hooks/purity
         doc.text(`Het han: ${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('vi-VN')}`, 20, 72);
         
         // Table Items
@@ -193,7 +194,7 @@ const CartSidebar = () => {
             )}
 
             {/* Giao diện chính của Sidebar */}
-            <div className={`fixed top-0 right-0 h-full w-full md:w-[450px] bg-theme-primary border-l border-theme shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+            <div className={`fixed top-0 right-0 h-full w-full md:w-112.5 bg-theme-primary border-l border-theme shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}`}>
 
                 {/* Header */}
                 <div className="flex justify-between items-center p-4 md:p-5 border-b border-theme bg-theme-secondary transition-colors shrink-0">
@@ -258,7 +259,7 @@ const CartSidebar = () => {
 
                         <button 
                             onClick={generatePDF}
-                            className="w-full bg-[#E10600] hover:bg-red-700 text-white font-black py-3.5 md:py-4 rounded-xl uppercase tracking-[0.1em] transition-all shadow-lg shadow-[#E10600]/20 active:scale-95 cursor-pointer text-xs md:text-sm"
+                            className="w-full bg-[#E10600] hover:bg-red-700 text-white font-black py-3.5 md:py-4 rounded-xl uppercase tracking-widest transition-all shadow-lg shadow-[#E10600]/20 active:scale-95 cursor-pointer text-xs md:text-sm"
                         >
                             Tải Xuống Báo Giá
                         </button>
