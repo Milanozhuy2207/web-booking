@@ -1,23 +1,47 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { groupsData } from '../data/mockData';
 import { CartContext } from './CartContextInstance';
+import { db } from '../services/firebase';
+import { ref, onValue, set, push, remove, update } from "firebase/database";
 
 export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
     const [isCartOpen, setIsCartOpen] = useState(false);
+    const [marketplaceData, setMarketplaceData] = useState([]); // Khởi tạo mảng rỗng, sẽ load từ Firebase
+    const [isLoading, setIsLoading] = useState(true);
 
-    // Marketplace Data state with localStorage persistence
-    const [marketplaceData, setMarketplaceData] = useState(() => {
-        const savedData = localStorage.getItem('marketplaceData');
-        return savedData ? JSON.parse(savedData) : groupsData;
-    });
+    // Load dữ liệu từ Firebase Realtime Database
+    useEffect(() => {
+        const marketplaceRef = ref(db, 'marketplace');
+        
+        // Lắng nghe thay đổi thời gian thực
+        const unsubscribe = onValue(marketplaceRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                // Chuyển đối tượng Firebase thành mảng
+                const itemsArray = Object.keys(data).map(key => ({
+                    ...data[key],
+                    id: key // Dùng key của Firebase làm ID
+                }));
+                setMarketplaceData(itemsArray);
+            } else {
+                // Nếu DB trống, khởi tạo bằng dữ liệu mẫu (chỉ chạy lần đầu)
+                setMarketplaceData(groupsData);
+                // Lưu dữ liệu mẫu lên Firebase nếu muốn
+                // groupsData.forEach(item => push(marketplaceRef, item));
+            }
+            setIsLoading(false);
+        });
+
+        return () => unsubscribe();
+    }, []);
 
     // Admin Authentication state
     const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
         return localStorage.getItem('isAdminLoggedIn') === 'true';
     });
 
-    // Theme state with system preference fallback
+    // Theme state
     const [isDarkMode, setIsDarkMode] = useState(() => {
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme) {
@@ -44,11 +68,6 @@ export const CartProvider = ({ children }) => {
         }
     }, [isDarkMode]);
 
-    // Sync marketplaceData to localStorage
-    useEffect(() => {
-        localStorage.setItem('marketplaceData', JSON.stringify(marketplaceData));
-    }, [marketplaceData]);
-
     const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
     const adminLogin = (username, password) => {
@@ -65,22 +84,26 @@ export const CartProvider = ({ children }) => {
         localStorage.removeItem('isAdminLoggedIn');
     };
 
+    // Firebase CRUD Operations
     const addMarketplaceItem = (newItem) => {
-        setMarketplaceData(prev => [...prev, { ...newItem, id: Date.now() }]);
+        const marketplaceRef = ref(db, 'marketplace');
+        push(marketplaceRef, newItem);
         setNotification(`Đã thêm "${newItem.name}" thành công!`);
         setTimeout(() => setNotification(null), 3000);
     };
 
     const updateMarketplaceItem = (id, updatedItem) => {
-        setMarketplaceData(prev =>
-            prev.map(item => item.id === id ? { ...item, ...updatedItem } : item)
-        );
+        const itemRef = ref(db, `marketplace/${id}`);
+        update(itemRef, updatedItem);
         setNotification(`Đã cập nhật thông tin kênh thành công!`);
         setTimeout(() => setNotification(null), 3000);
     };
 
     const removeMarketplaceItem = (id) => {
-        setMarketplaceData(prev => prev.filter(item => item.id !== id));
+        const itemRef = ref(db, `marketplace/${id}`);
+        remove(itemRef);
+        setNotification(`Đã xóa kênh thành công!`);
+        setTimeout(() => setNotification(null), 3000);
     };
 
     const addToCart = (group) => {
@@ -181,7 +204,8 @@ export const CartProvider = ({ children }) => {
             marketplaceData,
             addMarketplaceItem,
             updateMarketplaceItem,
-            removeMarketplaceItem
+            removeMarketplaceItem,
+            isLoading
         }}>
             {children}
         </CartContext.Provider>

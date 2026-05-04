@@ -1,18 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from './CartContextInstance';
 import { FiPlus, FiUsers, FiTrendingUp } from 'react-icons/fi';
 
 const Marketplace = () => {
-    const { addToCart, filteredData, cartItems, searchTerm, selectedCategory, followerRange, budgetRange } = useCart();
+    const { addToCart, filteredData, isLoading } = useCart();
     
     // Infinite Scroll State
     const [visibleCount, setVisibleCount] = useState(12);
-    const loaderRef = useRef(null);
-
-    // Reset visible count when any filter changes
-    // useEffect(() => {
-    //     setVisibleCount(12);
-    // }, [searchTerm, selectedCategory, followerRange, budgetRange]);
+    const loaderRef = React.useRef(null);
 
     // Intersection Observer to detect when user reaches bottom
     useEffect(() => {
@@ -41,6 +36,15 @@ const Marketplace = () => {
     }, [visibleCount, filteredData.length]);
 
     const displayData = filteredData.slice(0, visibleCount);
+
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#E10600]"></div>
+                <p className="mt-4 text-theme-muted font-bold uppercase tracking-widest text-xs">Đang tải dữ liệu...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 font-sans transition-colors duration-300">
@@ -97,59 +101,59 @@ const Marketplace = () => {
                                             {group.platform}
                                         </span>
                                     </div>
-
-                                    <div className="absolute top-4 right-4">
-                                        <div className="bg-yellow-500 p-1.5 rounded-lg text-black shadow-lg">
-                                            <FiTrendingUp size={12} />
-                                        </div>
-                                    </div>
                                 </div>
 
-                                {/* Card Content */}
-                                <div className="p-3 md:p-6 flex flex-col flex-1 relative z-10 text-center md:text-left pointer-events-none">
-                                    <div className="mb-4 min-h-[3rem] md:min-h-[4rem] flex flex-col justify-start">
-                                        <h3 className="text-theme-primary font-black text-sm md:text-lg uppercase leading-tight group-hover:text-[#E10600] transition-colors duration-300 break-words">
-                                            {group.name}
-                                        </h3>
-                                        <p className="text-[#E10600] text-[8px] md:text-[10px] font-bold uppercase tracking-widest mt-1">
-                                            {group.category}
-                                        </p>
-                                        <p className="text-theme-primary text-[10px] md:text-xs italic line-clamp-2 mt-2 leading-relaxed hidden md:block opacity-80">
-                                            "{group.description}"
-                                        </p>
-                                    </div>
-
-                                    {/* Unified Stats Box */}
-                                    <div className="bg-theme-secondary rounded-xl md:rounded-2xl border border-theme p-2 md:p-4 flex flex-col md:flex-row justify-around md:items-center gap-2 mb-4 mt-auto">
-                                        <div className="flex flex-col items-center md:flex-1 text-center md:text-left">
-                                            <p className="text-theme-muted text-[8px] md:text-[9px] font-black uppercase tracking-[0.1em] mb-0.5">BOOKING</p>
-                                            <p className="text-[#E10600] font-black text-xs md:text-sm">{group.bookingPrice}</p>
+                                {/* Card Body */}
+                                <div className="p-3 md:p-6 flex-1 flex flex-col justify-between relative z-10 pointer-events-none">
+                                    <div className="space-y-2 md:space-y-4">
+                                        <div className="flex flex-col gap-1 md:gap-2">
+                                            <h3 className="text-theme-primary font-black text-xs md:text-lg uppercase leading-tight md:leading-snug group-hover:text-[#E10600] transition-colors duration-300 line-clamp-2">
+                                                {group.name}
+                                            </h3>
+                                            <div className="flex flex-wrap items-center gap-2">
+                                                <span className="bg-theme-secondary text-theme-muted text-[8px] md:text-[10px] font-black px-2 md:px-3 py-1 rounded-full uppercase tracking-[0.1em] border border-theme">
+                                                    {group.category}
+                                                </span>
+                                            </div>
                                         </div>
                                         
-                                        <div className="hidden md:block h-8 w-px bg-theme-muted/20" />
-                                        <div className="h-px w-full bg-theme-muted/10 md:hidden" />
-                                        
-                                        <div className="flex flex-col items-center md:flex-1 text-center md:text-left">
-                                            <p className="text-theme-muted text-[8px] md:text-[9px] font-black uppercase tracking-[0.1em] mb-0.5">FOLLOWERS</p>
-                                            <p className="text-theme-primary font-black text-xs md:text-sm">{group.followers}</p>
+                                        {/* Stats Row */}
+                                        <div className="flex justify-between items-center py-2 md:py-4 border-y border-theme/50">
+                                            <div className="flex items-center gap-1.5 md:gap-3 text-theme-muted">
+                                                <FiUsers size={14} className="text-[#E10600] md:w-5 md:h-5" />
+                                                <div className="flex flex-col">
+                                                    <span className="text-[10px] md:text-sm font-black text-theme-primary leading-none uppercase tracking-wider">{group.followers}</span>
+                                                    <span className="text-[7px] md:text-[8px] font-bold uppercase tracking-widest opacity-40">Followers</span>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-1.5 md:gap-3 text-theme-muted">
+                                                <FiTrendingUp size={14} className="text-[#E10600] md:w-5 md:h-5" />
+                                                <div className="flex flex-col items-end">
+                                                    <span className="text-[10px] md:text-sm font-black text-theme-primary leading-none uppercase tracking-wider">TĂNG TRƯỞNG</span>
+                                                    <span className="text-[7px] md:text-[8px] font-bold uppercase tracking-widest opacity-40">Ổn định</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    {/* Action Button */}
-                                    <div className="relative z-20 pointer-events-auto">
+                                    {/* Action Area */}
+                                    <div className="mt-4 md:mt-8 flex items-center justify-between gap-4">
+                                        <div className="flex flex-col">
+                                            <span className="text-theme-muted text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] opacity-50 mb-1">CHI PHÍ BOOKING</span>
+                                            <span className="text-theme-primary font-black text-sm md:text-2xl tracking-tighter">
+                                                {group.bookingPrice}
+                                            </span>
+                                        </div>
+                                        
                                         <button
                                             onClick={(e) => {
+                                                e.preventDefault();
                                                 e.stopPropagation();
                                                 addToCart(group);
                                             }}
-                                            disabled={cartItems.some(item => item.id === group.id)}
-                                            className={`w-full font-black text-[10px] md:text-xs py-3 rounded-xl border transition-all duration-300 active:scale-95 uppercase tracking-widest ${
-                                                cartItems.some(item => item.id === group.id)
-                                                ? 'bg-gray-500/10 border-gray-500/20 text-gray-500 cursor-default'
-                                                : 'bg-[#E10600]/10 hover:bg-[#E10600] border-[#E10600]/20 text-[#E10600] hover:text-white cursor-pointer'
-                                            }`}
+                                            className="pointer-events-auto bg-theme-secondary hover:bg-[#E10600] text-theme-primary hover:text-white p-2 md:px-6 md:py-4 rounded-2xl md:rounded-3xl transition-all duration-500 border border-theme group/btn shadow-lg active:scale-95"
                                         >
-                                            {cartItems.some(item => item.id === group.id) ? 'ĐÃ TRONG GIỎ' : 'THÊM GIỎ HÀNG'}
+                                            <FiPlus size={18} className="md:w-6 md:h-6" />
                                         </button>
                                     </div>
                                 </div>
@@ -159,11 +163,10 @@ const Marketplace = () => {
 
                     {/* Infinite Scroll Trigger */}
                     {visibleCount < filteredData.length && (
-                        <div 
-                            ref={loaderRef} 
-                            className="w-full flex justify-center py-12"
-                        >
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#E10600]"></div>
+                        <div ref={loaderRef} className="py-20 flex justify-center">
+                            <div className="animate-bounce text-theme-muted font-black text-[10px] uppercase tracking-[0.3em]">
+                                Đang tải thêm kênh...
+                            </div>
                         </div>
                     )}
                 </>
