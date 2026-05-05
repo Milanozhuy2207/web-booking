@@ -98,8 +98,8 @@ const Marketplace = () => {
                                 {/* Card Body */}
                                 <div className="p-6 flex-1 flex flex-col">
                                     {/* Title & Category Row */}
-                                    <div className="flex justify-between items-start gap-2 mb-4">
-                                        <h3 className="text-theme-primary font-black text-lg uppercase leading-tight line-clamp-2">
+                                    <div className="flex justify-between items-start gap-2 mb-4 min-h-[3rem]">
+                                        <h3 className="text-theme-primary font-black text-lg uppercase leading-tight">
                                             {group.name}
                                         </h3>
                                         <span className="text-[#E10600] text-[10px] font-black uppercase tracking-widest mt-1.5 flex-shrink-0">
@@ -108,36 +108,39 @@ const Marketplace = () => {
                                     </div>
 
                                     {/* Description */}
-                                    <p className="text-theme-muted text-xs italic opacity-60 line-clamp-2 mb-6 h-8">
+                                    <p className="text-theme-muted text-xs italic opacity-60 mb-6 flex-1">
                                         “{group.description || 'Chưa có mô tả cho kênh này'}”
                                     </p>
                                     
-                                    {/* Stats Box (Dark Background) */}
-                                    <div className="bg-[#121826] rounded-2xl p-4 grid grid-cols-2 gap-4 mb-6 transition-colors group-hover:bg-[#1a2233]">
-                                        <div className="flex flex-col gap-0.5">
-                                            <span className="text-theme-muted text-[8px] font-black uppercase tracking-[0.2em] opacity-50">Booking</span>
-                                            <span className="text-[#E10600] font-black text-base tracking-tighter">
-                                                {group.bookingPrice}
-                                            </span>
+                                    {/* Bottom Action Area */}
+                                    <div className="mt-auto">
+                                        {/* Stats Box (Dark Background) */}
+                                        <div className="bg-[#121826] rounded-2xl p-4 grid grid-cols-2 gap-4 mb-6 transition-colors group-hover:bg-[#1a2233]">
+                                            <div className="flex flex-col gap-0.5">
+                                                <span className="text-theme-muted text-[8px] font-black uppercase tracking-[0.2em] opacity-50">Booking</span>
+                                                <span className="text-[#E10600] font-black text-base tracking-tighter">
+                                                    {group.bookingPrice}
+                                                </span>
+                                            </div>
+                                            <div className="flex flex-col gap-0.5 items-end">
+                                                <span className="text-theme-muted text-[8px] font-black uppercase tracking-[0.2em] opacity-50">Followers</span>
+                                                <span className="text-white font-black text-base tracking-tighter">
+                                                    {group.followers}
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div className="flex flex-col gap-0.5 items-end">
-                                            <span className="text-theme-muted text-[8px] font-black uppercase tracking-[0.2em] opacity-50">Followers</span>
-                                            <span className="text-white font-black text-base tracking-tighter">
-                                                {group.followers}
-                                            </span>
-                                        </div>
-                                    </div>
 
-                                    {/* Action Button */}
-                                    <button
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            addToCart(group);
-                                        }}
-                                        className="w-full bg-[#E10600] hover:bg-red-700 text-white py-4 rounded-2xl font-black text-sm transition-all duration-300 shadow-lg shadow-[#E10600]/20 active:scale-[0.98] uppercase tracking-widest"
-                                    >
-                                        Thêm giỏ hàng
-                                    </button>
+                                        {/* Action Button */}
+                                        <button
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                addToCart(group);
+                                            }}
+                                            className="w-full bg-[#E10600] hover:bg-red-700 text-white py-4 rounded-2xl font-black text-sm transition-all duration-300 shadow-lg shadow-[#E10600]/20 active:scale-[0.98] uppercase tracking-widest"
+                                        >
+                                            Thêm giỏ hàng
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         ))}
