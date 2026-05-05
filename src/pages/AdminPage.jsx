@@ -1,7 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { useCart } from '../components/CartContextInstance';
-import { FiPlus, FiTrash2, FiExternalLink, FiImage, FiSearch, FiFilter, FiEdit2, FiX, FiUsers, FiTrendingUp } from 'react-icons/fi';
-import { FaFacebook, FaTiktok, FaInstagram, FaYoutube } from 'react-icons/fa';
+import { FiPlus, FiTrash2, FiExternalLink, FiImage, FiSearch, FiFilter, FiEdit2, FiX } from 'react-icons/fi';
 
 const AdminPage = () => {
     const { 
@@ -28,13 +27,6 @@ const AdminPage = () => {
         followers: '',
         image: ''
     });
-
-    const platforms = [
-        { name: 'Facebook', icon: <FaFacebook className="text-blue-600" /> },
-        { name: 'TikTok', icon: <FaTiktok className="text-theme-primary" /> },
-        { name: 'Instagram', icon: <FaInstagram className="text-pink-600" /> },
-        { name: 'YouTube', icon: <FaYoutube className="text-red-600" /> }
-    ];
 
     const handleEdit = (item) => {
         setEditingId(item.id);
@@ -126,55 +118,11 @@ const AdminPage = () => {
             </div>
 
             <div className="grid lg:grid-cols-3 gap-8 items-start">
-                {/* Form & Preview Section - STICKY CONTAINER */}
-                <div className="lg:col-span-1 lg:sticky lg:top-24 max-h-[calc(100vh-120px)] flex flex-col gap-4">
-                    
-                    {/* LIVE PREVIEW CARD - PINNED AT TOP */}
-                    <div className="bg-theme-card rounded-3xl border-2 border-dashed border-blue-500/30 p-3 relative overflow-hidden flex-shrink-0 shadow-lg">
-                        <div className="absolute top-1.5 right-3 bg-blue-500 text-white text-[7px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-tighter z-10">
-                            Xem trước trực tiếp
-                        </div>
-                        
-                        <div className="flex gap-4 items-center">
-                            {/* Compact Image Preview */}
-                            <div className="h-20 w-20 rounded-2xl bg-theme-secondary overflow-hidden border border-theme flex-shrink-0">
-                                <img
-                                    src={formData.image || '/favicon.svg'}
-                                    alt="Preview"
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                            
-                            {/* Quick Info */}
-                            <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 mb-1">
-                                    <span className="bg-[#E10600] text-white text-[8px] font-black px-1.5 py-0.5 rounded uppercase">
-                                        {formData.platform}
-                                    </span>
-                                    <span className="text-theme-muted text-[8px] font-black uppercase tracking-wider truncate">
-                                        {formData.category}
-                                    </span>
-                                </div>
-                                <h3 className="text-theme-primary font-black text-xs uppercase leading-tight truncate mb-1">
-                                    {formData.name || 'Tên kênh mới...'}
-                                </h3>
-                                <div className="flex items-center gap-3">
-                                    <div className="flex items-center gap-1 text-theme-muted text-[9px] font-bold">
-                                        <FiUsers size={10} className="text-[#E10600]" />
-                                        {formData.followers || '0'}
-                                    </div>
-                                    <div className="text-theme-primary font-black text-xs">
-                                        {formData.price ? Number(formData.price).toLocaleString() + ' ₫' : '0 ₫'}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* FORM CARD - SCROLLABLE IF NEEDED */}
-                    <div className="bg-theme-card rounded-3xl border border-theme shadow-xl overflow-y-auto flex-1 custom-scrollbar">
-                        <div className={`p-4 border-b border-theme sticky top-0 z-10 transition-colors ${editingId ? 'bg-amber-500/10' : 'bg-theme-secondary/30'}`}>
-                            <h2 className="text-theme-primary font-black text-sm uppercase flex items-center gap-2">
+                {/* Form Section */}
+                <div className="lg:col-span-1">
+                    <div className="bg-theme-card rounded-3xl border border-theme shadow-sm overflow-hidden">
+                        <div className={`p-6 border-b border-theme transition-colors ${editingId ? 'bg-amber-500/10' : 'bg-theme-secondary/30'}`}>
+                            <h2 className="text-theme-primary font-black text-lg uppercase flex items-center gap-2">
                                 {editingId ? (
                                     <>
                                         <FiEdit2 className="text-amber-500" /> Cập nhật kênh
@@ -186,41 +134,19 @@ const AdminPage = () => {
                                 )}
                             </h2>
                         </div>
-                        <form onSubmit={handleSubmit} className="p-5 space-y-4">
+                        <form onSubmit={handleSubmit} className="p-6 space-y-4">
                             <div>
-                                <label className="block text-theme-muted text-[9px] font-black uppercase tracking-wider mb-1 ml-1">Tên kênh *</label>
+                                <label className="block text-theme-muted text-[10px] font-black uppercase tracking-wider mb-1.5 ml-1">Tên kênh *</label>
                                 <input
                                     type="text" name="name" value={formData.name} onChange={handleChange}
-                                    placeholder="Ví dụ: Vén Khéo, Anh Thám Tử..."
-                                    className="w-full bg-theme-secondary border border-theme rounded-xl px-3 py-2.5 text-xs text-theme-primary focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-theme-muted/30"
+                                    className="w-full bg-theme-secondary border border-theme rounded-xl px-4 py-3 text-sm text-theme-primary focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-theme-muted/30"
                                     required
                                 />
                             </div>
-
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-2 gap-4">
                                 <div className="col-span-1">
-                                    <label className="block text-theme-muted text-[9px] font-black uppercase tracking-wider mb-1 ml-1">Nền tảng</label>
-                                    <div className="grid grid-cols-2 gap-1.5">
-                                        {platforms.map(p => (
-                                            <button
-                                                key={p.name}
-                                                type="button"
-                                                onClick={() => setFormData(prev => ({ ...prev, platform: p.name }))}
-                                                className={`flex items-center justify-center gap-1.5 p-1.5 rounded-lg border transition-all ${
-                                                    formData.platform === p.name 
-                                                    ? 'border-blue-500 bg-blue-500/10' 
-                                                    : 'border-theme bg-theme-secondary hover:border-theme-muted'
-                                                }`}
-                                            >
-                                                {p.icon}
-                                                <span className="text-[9px] font-bold">{p.name}</span>
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                                <div className="col-span-1">
-                                    <label className="block text-theme-muted text-[9px] font-black uppercase tracking-wider mb-1 ml-1">Danh mục</label>
-                                    <div className="flex gap-1.5">
+                                    <label className="block text-theme-muted text-[10px] font-black uppercase tracking-wider mb-1.5 ml-1">Danh mục</label>
+                                    <div className="flex gap-2">
                                         {isNewCategory ? (
                                             <div className="relative flex-1">
                                                 <input
@@ -229,15 +155,15 @@ const AdminPage = () => {
                                                     value={formData.category}
                                                     onChange={handleChange}
                                                     placeholder="Tên mới..."
-                                                    className="w-full bg-theme-secondary border border-theme rounded-lg px-2 py-2 text-xs text-theme-primary outline-none focus:border-blue-500 transition-all"
+                                                    className="w-full bg-theme-secondary border border-theme rounded-xl px-3 py-3 text-sm text-theme-primary outline-none focus:border-blue-500 transition-all"
                                                     autoFocus
                                                 />
                                                 <button 
                                                     type="button"
                                                     onClick={() => setIsNewCategory(false)}
-                                                    className="absolute right-1.5 top-1/2 -translate-y-1/2 text-theme-muted hover:text-red-500"
+                                                    className="absolute right-2 top-1/2 -translate-y-1/2 text-theme-muted hover:text-red-500"
                                                 >
-                                                    <FiX size={12} />
+                                                    <FiX size={14} />
                                                 </button>
                                             </div>
                                         ) : (
@@ -246,7 +172,7 @@ const AdminPage = () => {
                                                     name="category"
                                                     value={formData.category}
                                                     onChange={handleChange}
-                                                    className="flex-1 bg-theme-secondary border border-theme rounded-lg px-2 py-2 text-[10px] text-theme-primary outline-none focus:border-blue-500"
+                                                    className="flex-1 bg-theme-secondary border border-theme rounded-xl px-2 py-3 text-xs md:text-sm text-theme-primary outline-none focus:border-blue-500"
                                                 >
                                                     {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
                                                 </select>
@@ -256,57 +182,65 @@ const AdminPage = () => {
                                                         setIsNewCategory(true);
                                                         setFormData(prev => ({ ...prev, category: '' }));
                                                     }}
-                                                    className="p-2 bg-theme-secondary border border-theme rounded-lg text-blue-600 hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center"
+                                                    className="p-3 bg-theme-secondary border border-theme rounded-xl text-blue-600 hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center"
+                                                    title="Thêm danh mục mới"
                                                 >
-                                                    <FiPlus size={14} />
+                                                    <FiPlus size={16} />
                                                 </button>
                                             </>
                                         )}
                                     </div>
                                 </div>
+                                <div className="col-span-1">
+                                    <label className="block text-theme-muted text-[10px] font-black uppercase tracking-wider mb-1.5 ml-1">Nền tảng</label>
+                                    <input
+                                        type="text" name="platform" value={formData.platform} onChange={handleChange}
+                                        className="w-full bg-theme-secondary border border-theme rounded-xl px-4 py-3 text-sm text-theme-primary outline-none focus:border-blue-500"
+                                    />
+                                </div>
                             </div>
-
                             <div>
-                                <label className="block text-theme-muted text-[9px] font-black uppercase tracking-wider mb-1 ml-1">Link nhóm/kênh *</label>
+                                <label className="block text-theme-muted text-[10px] font-black uppercase tracking-wider mb-1.5 ml-1">Link nhóm/kênh *</label>
                                 <input
                                     type="url" name="link" value={formData.link} onChange={handleChange}
-                                    placeholder="https://facebook.com/groups/..."
-                                    className="w-full bg-theme-secondary border border-theme rounded-xl px-3 py-2.5 text-xs text-theme-primary outline-none focus:border-blue-500"
+                                    className="w-full bg-theme-secondary border border-theme rounded-xl px-4 py-3 text-sm text-theme-primary outline-none focus:border-blue-500"
                                     required
                                 />
                             </div>
-
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-theme-muted text-[9px] font-black uppercase tracking-wider mb-1 ml-1">Giá (VNĐ) *</label>
+                                    <label className="block text-theme-muted text-[10px] font-black uppercase tracking-wider mb-1.5 ml-1">Giá (VNĐ) *</label>
                                     <input
                                         type="number" name="price" value={formData.price} onChange={handleChange}
-                                        className="w-full bg-theme-secondary border border-theme rounded-xl px-3 py-2.5 text-xs text-theme-primary outline-none focus:border-blue-500"
+                                        className="w-full bg-theme-secondary border border-theme rounded-xl px-4 py-3 text-sm text-theme-primary outline-none focus:border-blue-500"
                                         required
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-theme-muted text-[9px] font-black uppercase tracking-wider mb-1 ml-1">Followers</label>
+                                    <label className="block text-theme-muted text-[10px] font-black uppercase tracking-wider mb-1.5 ml-1">Followers</label>
                                     <input
                                         type="text" name="followers" value={formData.followers} onChange={handleChange}
-                                        placeholder="1.2M, 500K..."
-                                        className="w-full bg-theme-secondary border border-theme rounded-xl px-3 py-2.5 text-xs text-theme-primary outline-none focus:border-blue-500"
+                                        className="w-full bg-theme-secondary border border-theme rounded-xl px-4 py-3 text-sm text-theme-primary outline-none focus:border-blue-500"
                                     />
                                 </div>
                             </div>
-
                             <div>
-                                <label className="block text-theme-muted text-[9px] font-black uppercase tracking-wider mb-1 ml-1">Ảnh đại diện</label>
-                                <div className="flex items-center gap-3">
+                                <label className="block text-theme-muted text-[10px] font-black uppercase tracking-wider mb-1.5 ml-1">Ảnh đại diện</label>
+                                <div className="flex items-center gap-4">
                                     <div 
                                         onClick={() => document.getElementById('image-upload').click()}
-                                        className="h-14 w-14 rounded-xl bg-theme-secondary border border-dashed border-theme flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 hover:text-blue-500 transition-all overflow-hidden bg-center bg-cover bg-no-repeat group relative"
+                                        className="h-20 w-20 rounded-2xl bg-theme-secondary border-2 border-dashed border-theme flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 hover:text-blue-500 transition-all overflow-hidden bg-center bg-cover bg-no-repeat group relative"
                                         style={formData.image ? { backgroundImage: `url(${formData.image})` } : {}}
                                     >
-                                        {!formData.image && <FiPlus size={16} />}
+                                        {!formData.image && (
+                                            <>
+                                                <FiPlus size={20} />
+                                                <span className="text-[8px] font-black uppercase mt-1">Tải ảnh</span>
+                                            </>
+                                        )}
                                         {formData.image && (
                                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                                                <FiImage className="text-white" size={16} />
+                                                <FiImage className="text-white" size={20} />
                                             </div>
                                         )}
                                     </div>
@@ -323,42 +257,39 @@ const AdminPage = () => {
                                             name="image"
                                             value={formData.image}
                                             onChange={handleChange}
-                                            placeholder="URL ảnh..."
-                                            className="w-full bg-theme-secondary border border-theme rounded-xl px-3 py-2.5 text-[10px] text-theme-primary outline-none focus:border-blue-500 transition-all"
+                                            placeholder="Hoặc dán URL ảnh..."
+                                            className="w-full bg-theme-secondary border border-theme rounded-xl px-4 py-3 text-sm text-theme-primary outline-none focus:border-blue-500 transition-all placeholder:text-theme-muted/30"
                                         />
                                     </div>
                                 </div>
                             </div>
-
                             <div>
-                                <label className="block text-theme-muted text-[9px] font-black uppercase tracking-wider mb-1 ml-1">Mô tả ngắn</label>
+                                <label className="block text-theme-muted text-[10px] font-black uppercase tracking-wider mb-1.5 ml-1">Mô tả ngắn</label>
                                 <textarea
                                     name="description" value={formData.description} onChange={handleChange}
-                                    rows="2"
-                                    placeholder="Nội dung giới thiệu về kênh..."
-                                    className="w-full bg-theme-secondary border border-theme rounded-xl px-3 py-2 text-xs text-theme-primary outline-none focus:border-blue-500 resize-none"
+                                    rows="3"
+                                    className="w-full bg-theme-secondary border border-theme rounded-xl px-4 py-3 text-sm text-theme-primary outline-none focus:border-blue-500 resize-none"
                                 ></textarea>
                             </div>
-
-                            <div className="flex gap-2 pt-2 sticky bottom-0 bg-theme-card py-2">
+                            <div className="flex gap-3">
                                 {editingId && (
                                     <button
                                         type="button"
                                         onClick={handleCancel}
-                                        className="flex-1 bg-theme-secondary text-theme-primary font-black py-3 rounded-xl hover:bg-theme-secondary/80 transition-all uppercase tracking-widest text-[9px]"
+                                        className="flex-1 bg-theme-secondary text-theme-primary font-black py-4 rounded-xl hover:bg-theme-secondary/80 transition-all uppercase tracking-widest text-[10px]"
                                     >
                                         Hủy
                                     </button>
                                 )}
                                 <button
                                     type="submit"
-                                    className={`flex-[2] text-white font-black py-3 rounded-xl transition-all shadow-lg uppercase tracking-widest text-[9px] ${
+                                    className={`flex-[2] text-white font-black py-4 rounded-xl transition-all shadow-lg uppercase tracking-widest text-[10px] ${
                                         editingId 
                                         ? 'bg-amber-600 hover:bg-amber-700 shadow-amber-600/20' 
                                         : 'bg-blue-600 hover:bg-blue-700 shadow-blue-600/20'
                                     }`}
                                 >
-                                    {editingId ? 'Cập nhật' : 'Lưu kênh'}
+                                    {editingId ? 'Xác nhận cập nhật' : 'Lưu thông tin kênh'}
                                 </button>
                             </div>
                         </form>
@@ -419,10 +350,7 @@ const AdminPage = () => {
                                                         </div>
                                                         <div>
                                                             <p className="text-theme-primary font-black text-sm uppercase leading-tight">{item.name}</p>
-                                                            <div className="flex items-center gap-2 mt-0.5">
-                                                                {platforms.find(p => p.name === item.platform)?.icon || <FiPlus size={10} />}
-                                                                <p className="text-theme-muted text-[10px] font-bold uppercase tracking-wider">{item.platform}</p>
-                                                            </div>
+                                                            <p className="text-blue-600 text-[10px] font-bold uppercase tracking-wider">{item.platform}</p>
                                                         </div>
                                                     </div>
                                                 </td>
