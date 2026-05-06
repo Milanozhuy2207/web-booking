@@ -378,10 +378,10 @@ const AdminPage = () => {
                                                 </td>
                                                 <td className="px-8 py-6">
                                                     <div className="space-y-1">
-                                                        <p className="text-[#E10600] font-black text-lg tracking-tighter italic">{item.bookingPrice}</p>
+                                                        <p className="text-[#E10600] font-black text-lg tracking-tighter italic whitespace-nowrap">{item.bookingPrice}</p>
                                                         <div className="flex items-center gap-1.5 text-theme-muted">
-                                                            <FiUsers size={12} className="opacity-50" />
-                                                            <span className="text-[10px] font-black uppercase tracking-widest">{item.followers}</span>
+                                                            <FiUsers size={14} className="opacity-50" />
+                                                            <span className="text-xs font-black uppercase tracking-widest">{item.followers}</span>
                                                         </div>
                                                     </div>
                                                 </td>
