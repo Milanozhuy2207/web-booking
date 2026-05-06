@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { FiFilter, FiSearch, FiX } from 'react-icons/fi';
 import { useCart } from './CartContextInstance';
-import { groupsData } from '../data/mockData';
 
 const HeroStats = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,14 +30,15 @@ const HeroStats = () => {
             return num.toString();
         };
 
-        const uniqueTopics = new Set(groupsData.map(item => item.category)).size;
+        // Lấy số lượng ngành nghề từ danh sách categories (loại trừ 'All')
+        const uniqueTopicsCount = Math.max(0, categories.length - 1);
 
         return [
             { label: 'SỐ KÊNH', value: filteredData.length.toString() },
             { label: 'FOLLOWERS', value: formatFollowers(totalFollowers) },
-            { label: 'NGÀNH NGHỀ', value: uniqueTopics.toString(), isTopic: true }
+            { label: 'NGÀNH NGHỀ', value: uniqueTopicsCount.toString(), isTopic: true }
         ];
-    }, [filteredData]);
+    }, [filteredData, categories]);
 
     return (
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 pt-8 pb-8 font-sans transition-colors duration-300">
