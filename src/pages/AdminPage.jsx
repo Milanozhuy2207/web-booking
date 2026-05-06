@@ -57,10 +57,13 @@ const AdminPage = () => {
             alert('Vui lòng điền các trường bắt buộc (Tên, Link, Giá)');
             return;
         }
+
+        const numericPrice = Number(formData.price);
         const newItem = {
             ...formData,
-            price: Number(formData.price),
-            bookingPrice: formData.bookingPrice || `${Number(formData.price).toLocaleString()} ₫`
+            price: numericPrice,
+            // Luôn tạo lại bookingPrice từ price để đảm bảo đồng bộ khi chỉnh sửa
+            bookingPrice: `${numericPrice.toLocaleString('vi-VN')} ₫`
         };
 
         if (editingId) {
