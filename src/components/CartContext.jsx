@@ -146,27 +146,32 @@ export const CartProvider = ({ children }) => {
     };
 
     const filteredData = useMemo(() => {
-        return marketplaceData.filter(item => {
-            const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.description.toLowerCase().includes(searchTerm.toLowerCase());
+        return marketplaceData
+            .filter(item => {
+                const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    item.description.toLowerCase().includes(searchTerm.toLowerCase());
 
-            const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
+                const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
 
-            // Follower filtering
-            const followers = parseFollowers(item.followers);
-            let matchesFollowers = true;
-            if (followerRange === '< 200K') matchesFollowers = followers < 200000;
-            else if (followerRange === '200K - 1M') matchesFollowers = followers >= 200000 && followers <= 1000000;
-            else if (followerRange === '> 1M') matchesFollowers = followers > 1000000;
+                // Follower filtering
+                const followers = parseFollowers(item.followers);
+                let matchesFollowers = true;
+                if (followerRange === '< 200K') matchesFollowers = followers < 200000;
+                else if (followerRange === '200K - 1M') matchesFollowers = followers >= 200000 && followers <= 1000000;
+                else if (followerRange === '> 1M') matchesFollowers = followers > 1000000;
 
-            // Budget filtering
-            let matchesBudget = true;
-            if (budgetRange === '< 2M') matchesBudget = item.price < 2000000;
-            else if (budgetRange === '2M - 5M') matchesBudget = item.price >= 2000000 && item.price <= 5000000;
-            else if (budgetRange === '> 5M') matchesBudget = item.price > 5000000;
+                // Budget filtering
+                let matchesBudget = true;
+                if (budgetRange === '< 2M') matchesBudget = item.price < 2000000;
+                else if (budgetRange === '2M - 5M') matchesBudget = item.price >= 2000000 && item.price <= 5000000;
+                else if (budgetRange === '> 5M') matchesBudget = item.price > 5000000;
 
-            return matchesSearch && matchesCategory && matchesFollowers && matchesBudget;
-        });
+                return matchesSearch && matchesCategory && matchesFollowers && matchesBudget;
+            })
+            .sort((a, b) => {
+                // Sắp xếp theo followers giảm dần
+                return parseFollowers(b.followers) - parseFollowers(a.followers);
+            });
     }, [searchTerm, selectedCategory, followerRange, budgetRange, marketplaceData]);
 
     const categories = ['All', ...new Set(marketplaceData.map(item => item.category))];

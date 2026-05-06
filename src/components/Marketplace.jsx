@@ -65,7 +65,8 @@ const Marketplace = () => {
                         {displayData.map((group) => (
                             <div
                                 key={group.id}
-                                className="bg-theme-card rounded-[40px] overflow-hidden flex flex-col border border-theme hover:border-[#E10600]/30 transition-all duration-300 shadow-sm hover:shadow-2xl group relative"
+                                onClick={() => window.open(group.link || '#', '_blank')}
+                                className="bg-theme-card rounded-[40px] overflow-hidden flex flex-col border border-theme hover:border-[#E10600]/30 transition-all duration-300 shadow-sm hover:shadow-2xl group relative cursor-pointer"
                             >
                                 {/* Card Image Container */}
                                 <div className="relative aspect-[1.4/1] w-full overflow-hidden">
@@ -85,14 +86,11 @@ const Marketplace = () => {
                                     </div>
 
                                     {/* Link Icon - Top Right */}
-                                    <a 
-                                        href={group.link || '#'} 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
+                                    <div 
                                         className="absolute top-4 right-4 p-2.5 bg-[#FFCC00] text-black rounded-xl transition-transform hover:scale-110 z-10"
                                     >
                                         <FiExternalLink size={18} strokeWidth={3} />
-                                    </a>
+                                    </div>
                                 </div>
 
                                 {/* Card Body */}
@@ -133,7 +131,7 @@ const Marketplace = () => {
                                         {/* Action Button */}
                                         <button
                                             onClick={(e) => {
-                                                e.preventDefault();
+                                                e.stopPropagation();
                                                 addToCart(group);
                                             }}
                                             className="w-full bg-[#E10600] hover:bg-red-700 text-white py-4 rounded-2xl font-black text-sm transition-all duration-300 shadow-lg shadow-[#E10600]/20 active:scale-[0.98] uppercase tracking-widest"
