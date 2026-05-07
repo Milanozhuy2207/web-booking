@@ -114,7 +114,7 @@ const AdminLogin = () => {
                         </form>
                     </div>
                     <div className="bg-theme-secondary/30 px-8 py-6 border-t border-theme text-center">
-                        <p className="text-theme-muted text-xs">© 2024 VenKheo LLC • Admin Panel</p>
+                        <p className="text-theme-muted text-xs">© 2026 VenKheo LLC • Admin Panel</p>
                     </div>
                 </div>
             </div>
