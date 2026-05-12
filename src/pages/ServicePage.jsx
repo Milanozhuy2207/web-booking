@@ -16,7 +16,7 @@ const ServicePage = () => {
             subtitle: "KHỞI ĐỘNG",
             mainGoal: "Kích hoạt thảo luận ban đầu",
             features: [
-                "2 post/ngày trên 2 cộng đồng VenKheoLLC bất kỳ",
+                "2 post trên 2 cộng đồng VenKheoLLC bất kỳ",
                 "Cam kết >50,000 tương tác",
                 "Reach tối thiểu 300,000",
                 "Thay cover 1 group",
@@ -35,7 +35,7 @@ const ServicePage = () => {
             subtitle: "KHUẾCH ĐẠI",
             mainGoal: "Tăng uy tín & độ phủ",
             features: [
-                "5 post/ngày trên 3 cộng đồng",
+                "5 post trên 3 cộng đồng",
                 "Cam kết >100,000 tương tác",
                 "Reach tối thiểu 600,000",
                 "Thay cover 2 group",
