@@ -3,7 +3,7 @@ import { useCart } from './CartContextInstance';
 import { FiPlus, FiUsers, FiExternalLink } from 'react-icons/fi';
 
 const Marketplace = () => {
-    const { addToCart, filteredData, isLoading } = useCart();
+    const { addToCart, filteredData, isLoading, trackView } = useCart();
     
     // Infinite Scroll State
     const [visibleCount, setVisibleCount] = useState(12);
@@ -65,7 +65,10 @@ const Marketplace = () => {
                         {displayData.map((group) => (
                             <div
                                 key={group.id}
-                                onClick={() => window.open(group.link || '#', '_blank')}
+                                onClick={() => {
+                                    trackView(group.id);
+                                    window.open(group.link || '#', '_blank');
+                                }}
                                 className="bg-theme-card rounded-[24px] md:rounded-[40px] overflow-hidden flex flex-col border border-theme hover:border-[#E10600]/30 transition-all duration-300 shadow-sm hover:shadow-2xl group relative cursor-pointer"
                             >
                                 {/* Card Image Container */}

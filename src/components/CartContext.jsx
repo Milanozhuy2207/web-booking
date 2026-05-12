@@ -87,7 +87,12 @@ export const CartProvider = ({ children }) => {
     // Firebase CRUD Operations
     const addMarketplaceItem = (newItem) => {
         const marketplaceRef = ref(db, 'marketplace');
-        push(marketplaceRef, newItem);
+        push(marketplaceRef, {
+            ...newItem,
+            views: 0,
+            bookings: 0,
+            revenue: 0
+        });
         setNotification(`Đã thêm "${newItem.name}" thành công!`);
         setTimeout(() => setNotification(null), 3000);
     };
@@ -104,6 +109,37 @@ export const CartProvider = ({ children }) => {
         remove(itemRef);
         setNotification(`Đã xóa kênh thành công!`);
         setTimeout(() => setNotification(null), 3000);
+    };
+
+    // Analytics Tracking
+    const trackView = (id) => {
+        if (!id) return;
+        const item = marketplaceData.find(i => i.id === id);
+        if (item) {
+            const itemRef = ref(db, `marketplace/${id}`);
+            update(itemRef, {
+                views: (Number(item.views) || 0) + 1
+            });
+        }
+    };
+
+    const trackBooking = (items) => {
+        if (!items || items.length === 0) return;
+        
+        items.forEach(cartItem => {
+            // Find the original item in marketplaceData to get current stats
+            const originalItem = marketplaceData.find(i => i.id === cartItem.id);
+            if (originalItem) {
+                const itemRef = ref(db, `marketplace/${cartItem.id}`);
+                const quantity = Number(cartItem.quantity) || 1;
+                const price = Number(cartItem.price) || 0;
+                
+                update(itemRef, {
+                    bookings: (Number(originalItem.bookings) || 0) + quantity,
+                    revenue: (Number(originalItem.revenue) || 0) + (price * quantity)
+                });
+            }
+        });
     };
 
     const addToCart = (group) => {
@@ -210,6 +246,8 @@ export const CartProvider = ({ children }) => {
             addMarketplaceItem,
             updateMarketplaceItem,
             removeMarketplaceItem,
+            trackView,
+            trackBooking,
             isLoading
         }}>
             {children}

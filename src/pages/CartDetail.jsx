@@ -6,7 +6,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 const CartDetail = () => {
-    const { cartItems, removeFromCart, updateQuantity, clearCart } = useCart()
+    const { cartItems, removeFromCart, updateQuantity, clearCart, trackBooking } = useCart()
 
     const subTotal = cartItems.reduce((total, item) => total + ((item.price || 0) * (item.quantity || 1)), 0)
     
@@ -151,6 +151,10 @@ const CartDetail = () => {
         doc.setFontSize(8);
         doc.text("VEN KHEO NETWORK - KET NOI THUONG HIEU VOI CONG DONG", 105, pageHeight - 15, { align: "center" });
         doc.text("Email: contact@venkheo.com | Hotline: 09xx xxx xxx | Website: venkheo.com", 105, pageHeight - 10, { align: "center" });
+        
+        // Tracking analytics automatically
+        trackBooking(cartItems);
+        
         doc.save(`Bao_Gia_Ven_Kheo_${new Date().getTime().toString().slice(-6)}.pdf`);
         clearCart();
     };

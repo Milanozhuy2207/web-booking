@@ -17,9 +17,11 @@ const AdminPage = () => {
     } = useCart();
 
     const categories = contextCategories.filter(c => c !== 'All');
+    const [activeTab, setActiveTab] = useState('marketplace'); // 'marketplace' or 'analytics'
     const [searchTerm, setSearchTerm] = useState('');
     const [editingId, setEditingId] = useState(null);
     const [isNewCategory, setIsNewCategory] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     
     const [formData, setFormData] = useState({
         name: '',
@@ -30,7 +32,10 @@ const AdminPage = () => {
         bookingPrice: '',
         price: '',
         followers: '',
-        image: ''
+        image: '',
+        views: 0,
+        bookings: 0,
+        revenue: 0
     });
 
     const handleEdit = (item) => {
@@ -45,15 +50,28 @@ const AdminPage = () => {
             bookingPrice: item.bookingPrice,
             price: item.price,
             followers: item.followers,
-            image: item.image || ''
+            image: item.image || '',
+            views: item.views || 0,
+            bookings: item.bookings || 0,
+            revenue: item.revenue || 0
         });
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setIsModalOpen(true);
+    };
+
+    const handleAddNew = () => {
+        setEditingId(null);
+        setIsNewCategory(false);
+        setFormData({ 
+            name: '', category: categories[0] || 'Tài chính', platform: 'Facebook', link: '', description: '', bookingPrice: '', price: '', followers: '', image: '',
+            views: 0, bookings: 0, revenue: 0
+        });
+        setIsModalOpen(true);
     };
 
     const handleCancel = () => {
+        setIsModalOpen(false);
         setEditingId(null);
         setIsNewCategory(false);
-        setFormData({ name: '', category: categories[0] || 'Tài chính', platform: 'Facebook', link: '', description: '', bookingPrice: '', price: '', followers: '', image: '' });
     };
 
     const handleSubmit = (e) => {
@@ -67,18 +85,20 @@ const AdminPage = () => {
         const newItem = {
             ...formData,
             price: numericPrice,
-            bookingPrice: `${numericPrice.toLocaleString('vi-VN')} ₫`
+            bookingPrice: `${numericPrice.toLocaleString('vi-VN')} ₫`,
+            views: Number(formData.views) || 0,
+            bookings: Number(formData.bookings) || 0,
+            revenue: Number(formData.revenue) || 0
         };
 
         if (editingId) {
             updateMarketplaceItem(editingId, newItem);
-            setEditingId(null);
         } else {
             addMarketplaceItem(newItem);
         }
         
-        setIsNewCategory(false);
-        setFormData({ name: '', category: categories[0] || 'Tài chính', platform: 'Facebook', link: '', description: '', bookingPrice: '', price: '', followers: '', image: '' });
+        setIsModalOpen(false);
+        setEditingId(null);
     };
 
     const handleChange = (e) => {
@@ -103,14 +123,14 @@ const AdminPage = () => {
     );
 
     const stats = [
-        { label: 'Tổng số kênh', value: marketplaceData.length, icon: <FiGlobe className="text-blue-500" />, color: 'blue' },
-        { label: 'Kênh Facebook', value: marketplaceData.filter(i => i.platform === 'Facebook').length, icon: <FiFacebook className="text-indigo-500" />, color: 'indigo' },
-        { label: 'Ngành nghề', value: new Set(marketplaceData.map(i => i.category)).size, icon: <FiGrid className="text-purple-500" />, color: 'purple' },
-        { label: 'Hoạt động', value: 'Live', icon: <FiActivity className="text-green-500" />, color: 'green' },
+        { label: 'Tổng số kênh', value: marketplaceData.length, icon: <FiGlobe className="text-blue-500" /> },
+        { label: 'Tổng lượt truy cập', value: marketplaceData.reduce((acc, curr) => acc + (Number(curr.views) || 0), 0).toLocaleString(), icon: <FiActivity className="text-indigo-500" /> },
+        { label: 'Tổng Booking', value: marketplaceData.reduce((acc, curr) => acc + (Number(curr.bookings) || 0), 0), icon: <FiZap className="text-purple-500" /> },
+        { label: 'Tổng doanh thu', value: marketplaceData.reduce((acc, curr) => acc + (Number(curr.revenue) || 0), 0).toLocaleString('vi-VN') + ' ₫', icon: <FiDollarSign className="text-green-500" /> },
     ];
 
     return (
-        <div className="max-w-[1600px] mx-auto p-4 md:p-8 space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700 font-sans">
+        <div className="max-w-[1600px] mx-auto p-4 md:p-8 space-y-10 animate-in fade-in duration-700 font-sans relative">
             
             {/* Page Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-theme pb-8">
@@ -121,17 +141,19 @@ const AdminPage = () => {
                     <p className="text-theme-muted text-sm font-medium mt-1">Quản lý nội dung và dữ liệu Marketplace thời gian thực.</p>
                 </div>
                 <div className="flex items-center gap-3">
-                    <div className="px-4 py-2 bg-theme-secondary rounded-full border border-theme flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-theme-primary">Firebase Connected</span>
-                    </div>
+                    <button 
+                        onClick={handleAddNew}
+                        className="bg-[#E10600] text-white px-6 py-3 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center gap-2 hover:bg-red-700 transition-all shadow-xl shadow-red-600/20 active:scale-95"
+                    >
+                        <FiPlus size={18} /> Thêm Kênh Mới
+                    </button>
                 </div>
             </div>
 
             {/* Stats Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                 {stats.map((stat, idx) => (
-                    <div key={idx} className="bg-theme-card p-5 md:p-8 rounded-[32px] border border-theme shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                    <div key={idx} className="bg-theme-card p-5 md:p-8 rounded-[32px] border border-theme shadow-sm hover:shadow-xl transition-all duration-300 group">
                         <div className="flex items-center justify-between mb-4">
                             <div className={`p-3 rounded-2xl bg-theme-secondary group-hover:scale-110 transition-transform`}>
                                 {stat.icon}
@@ -139,275 +161,88 @@ const AdminPage = () => {
                             <FiZap className="text-theme-muted opacity-20" />
                         </div>
                         <p className="text-theme-muted text-[10px] font-black uppercase tracking-[0.2em] mb-1">{stat.label}</p>
-                        <p className="text-2xl md:text-4xl font-black text-theme-primary tracking-tighter">{stat.value}</p>
+                        <p className="text-2xl md:text-3xl font-black text-theme-primary tracking-tighter">{stat.value}</p>
                     </div>
                 ))}
             </div>
 
-            <div className="grid xl:grid-cols-12 gap-8 items-start">
-                
-                {/* Form Section - Sidebar Style on Large Screens */}
-                <div className="xl:col-span-4 sticky top-8">
-                    <div className="bg-theme-card rounded-[40px] border border-theme shadow-2xl overflow-hidden">
-                        <div className={`p-8 border-b border-theme transition-colors ${editingId ? 'bg-amber-500/10' : 'bg-[#E10600]'}`}>
-                            <h2 className={`font-black text-lg uppercase flex items-center gap-3 ${editingId ? 'text-amber-500' : 'text-white'}`}>
-                                {editingId ? (
-                                    <>
-                                        <div className="p-2 bg-amber-500/20 rounded-xl"><FiEdit2 /></div>
-                                        Cập nhật thông tin
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="p-2 bg-white/20 rounded-xl"><FiPlus /></div>
-                                        Thêm Kênh Mới
-                                    </>
-                                )}
-                            </h2>
-                        </div>
-                        
-                        <form onSubmit={handleSubmit} className="p-8 space-y-6">
-                            <div className="space-y-4">
-                                <div className="group">
-                                    <label className="block text-theme-muted text-[10px] font-black uppercase tracking-widest mb-2 ml-1 opacity-60 group-focus-within:opacity-100 transition-opacity">Tên kênh truyền thông *</label>
-                                    <input
-                                        type="text" name="name" value={formData.name} onChange={handleChange}
-                                        placeholder="Ví dụ: Vén Khéo"
-                                        className="w-full bg-theme-secondary border border-theme rounded-2xl px-5 py-4 text-sm font-bold text-theme-primary focus:ring-4 focus:ring-[#E10600]/10 focus:border-[#E10600] outline-none transition-all placeholder:text-theme-muted/20"
-                                        required
-                                    />
-                                </div>
+            {/* Tab System */}
+            <div className="space-y-6">
+                <div className="flex items-center gap-2 bg-theme-secondary/30 p-1.5 rounded-2xl w-fit border border-theme">
+                    <button 
+                        onClick={() => setActiveTab('marketplace')}
+                        className={`px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'marketplace' ? 'bg-[#E10600] text-white shadow-lg' : 'text-theme-muted hover:text-theme-primary'}`}
+                    >
+                        <FiGrid className="inline mr-2" /> Marketplace
+                    </button>
+                    <button 
+                        onClick={() => setActiveTab('analytics')}
+                        className={`px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'analytics' ? 'bg-[#E10600] text-white shadow-lg' : 'text-theme-muted hover:text-theme-primary'}`}
+                    >
+                        <FiActivity className="inline mr-2" /> Phân tích & Doanh thu
+                    </button>
+                </div>
 
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="col-span-1">
-                                        <label className="block text-theme-muted text-[10px] font-black uppercase tracking-widest mb-2 ml-1 opacity-60">Ngành nghề</label>
-                                        <div className="flex gap-2">
-                                            {isNewCategory ? (
-                                                <div className="relative flex-1">
-                                                    <input
-                                                        type="text" name="category" value={formData.category} onChange={handleChange}
-                                                        className="w-full bg-theme-secondary border border-[#E10600] rounded-2xl px-4 py-4 text-xs font-bold text-theme-primary outline-none"
-                                                        autoFocus
-                                                    />
-                                                    <button type="button" onClick={() => setIsNewCategory(false)} className="absolute right-3 top-1/2 -translate-y-1/2 text-red-500"><FiX size={14} /></button>
-                                                </div>
-                                            ) : (
-                                                <select
-                                                    name="category" value={formData.category} onChange={handleChange}
-                                                    className="w-full bg-theme-secondary border border-theme rounded-2xl px-3 py-4 text-xs font-bold text-theme-primary outline-none focus:border-[#E10600]"
-                                                >
-                                                    {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
-                                                </select>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="col-span-1 flex items-end">
-                                        <button
-                                            type="button"
-                                            onClick={() => { setIsNewCategory(!isNewCategory); if(!isNewCategory) setFormData(p => ({...p, category: ''})) }}
-                                            className={`w-full py-4 rounded-2xl border flex items-center justify-center transition-all ${isNewCategory ? 'bg-theme-secondary border-theme text-theme-muted' : 'bg-[#E10600]/10 border-[#E10600]/20 text-[#E10600] hover:bg-[#E10600] hover:text-white'}`}
-                                        >
-                                            {isNewCategory ? <FiGrid size={18} /> : <FiPlus size={18} />}
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-theme-muted text-[10px] font-black uppercase tracking-widest mb-2 ml-1 opacity-60">Lượt Follow</label>
-                                        <div className="relative">
-                                            <FiUsers className="absolute left-4 top-1/2 -translate-y-1/2 text-theme-muted opacity-30" />
-                                            <input
-                                                type="text" name="followers" value={formData.followers} onChange={handleChange}
-                                                placeholder="1.7M"
-                                                className="w-full bg-theme-secondary border border-theme rounded-2xl pl-11 pr-4 py-4 text-sm font-bold text-theme-primary outline-none focus:border-[#E10600]"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className="block text-theme-muted text-[10px] font-black uppercase tracking-widest mb-2 ml-1 opacity-60">Giá niêm yết</label>
-                                        <div className="relative">
-                                            <FiDollarSign className="absolute left-4 top-1/2 -translate-y-1/2 text-theme-muted opacity-30" />
-                                            <input
-                                                type="number" name="price" value={formData.price} onChange={handleChange}
-                                                placeholder="8000000"
-                                                className="w-full bg-theme-secondary border border-theme rounded-2xl pl-11 pr-4 py-4 text-sm font-bold text-theme-primary outline-none focus:border-[#E10600]"
-                                                required
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className="block text-theme-muted text-[10px] font-black uppercase tracking-widest mb-2 ml-1 opacity-60">Link liên kết *</label>
-                                    <input
-                                        type="url" name="link" value={formData.link} onChange={handleChange}
-                                        placeholder="https://facebook.com/groups/..."
-                                        className="w-full bg-theme-secondary border border-theme rounded-2xl px-5 py-4 text-sm font-bold text-theme-primary outline-none focus:border-[#E10600]"
-                                        required
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-theme-muted text-[10px] font-black uppercase tracking-widest mb-2 ml-1 opacity-60">Hình ảnh đại diện</label>
-                                    <div className="flex items-center gap-4">
-                                        <div 
-                                            onClick={() => document.getElementById('image-upload').click()}
-                                            className="h-24 w-24 rounded-3xl bg-theme-secondary border-2 border-dashed border-theme flex flex-col items-center justify-center cursor-pointer hover:border-[#E10600] hover:text-[#E10600] transition-all overflow-hidden bg-center bg-cover bg-no-repeat group relative shrink-0"
-                                            style={formData.image ? { backgroundImage: `url(${formData.image})` } : {}}
-                                        >
-                                            {!formData.image && <FiImage size={24} className="opacity-20" />}
-                                            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                                                <span className="text-[8px] font-black text-white uppercase">Đổi ảnh</span>
-                                            </div>
-                                        </div>
-                                        <input id="image-upload" type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
-                                        <div className="flex-1">
-                                            <input
-                                                type="text" name="image" value={formData.image} onChange={handleChange}
-                                                placeholder="Dán URL ảnh..."
-                                                className="w-full bg-theme-secondary border border-theme rounded-2xl px-4 py-4 text-xs font-bold text-theme-primary outline-none focus:border-[#E10600]"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className="block text-theme-muted text-[10px] font-black uppercase tracking-widest mb-2 ml-1 opacity-60">Mô tả tóm tắt</label>
-                                    <textarea
-                                        name="description" value={formData.description} onChange={handleChange}
-                                        rows="3"
-                                        placeholder="Nhập giới thiệu ngắn về kênh..."
-                                        className="w-full bg-theme-secondary border border-theme rounded-2xl px-5 py-4 text-sm font-bold text-theme-primary outline-none focus:border-[#E10600] resize-none transition-all"
-                                    ></textarea>
-                                </div>
-                            </div>
-
-                            <div className="flex gap-4 pt-4">
-                                {editingId && (
-                                    <button
-                                        type="button" onClick={handleCancel}
-                                        className="flex-1 bg-theme-secondary text-theme-primary font-black py-5 rounded-2xl hover:bg-theme-secondary/80 transition-all uppercase tracking-widest text-[10px] border border-theme"
-                                    >
-                                        Hủy bỏ
-                                    </button>
-                                )}
-                                <button
-                                    type="submit"
-                                    className={`flex-[2] text-white font-black py-5 rounded-2xl transition-all shadow-xl uppercase tracking-widest text-[10px] active:scale-95 ${
-                                        editingId ? 'bg-amber-500 hover:bg-amber-600 shadow-amber-500/20' : 'bg-[#E10600] hover:bg-red-700 shadow-[#E10600]/20'
-                                    }`}
-                                >
-                                    {editingId ? 'Lưu Thay Đổi' : 'Tạo Kênh Mới'}
-                                </button>
-                            </div>
-                        </form>
+                {/* Toolbar */}
+                <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-theme-card p-4 rounded-[30px] border border-theme shadow-sm sticky top-[72px] z-30">
+                    <div className="relative w-full md:w-96">
+                        <FiSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-[#E10600]" />
+                        <input
+                            type="text"
+                            placeholder="Tìm kiếm kênh truyền thông..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full bg-theme-secondary border border-theme rounded-2xl pl-14 pr-6 py-4 text-sm font-bold text-theme-primary outline-none focus:border-[#E10600] transition-all"
+                        />
+                    </div>
+                    <div className="px-6 py-4 bg-[#E10600]/5 text-[#E10600] rounded-2xl text-xs font-black uppercase tracking-widest flex items-center">
+                        {filteredList.length} {activeTab === 'marketplace' ? 'Kênh' : 'Bản ghi'}
                     </div>
                 </div>
 
-                {/* Table Section */}
-                <div className="xl:col-span-8 space-y-6">
-                    {/* Toolbar */}
-                    <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-theme-card p-4 rounded-[30px] border border-theme shadow-sm">
-                        <div className="relative w-full md:w-96">
-                            <FiSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-[#E10600]" />
-                            <input
-                                type="text"
-                                placeholder="Tìm kiếm theo tên hoặc ngành nghề..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full bg-theme-secondary border border-theme rounded-2xl pl-14 pr-6 py-4 text-sm font-bold text-theme-primary outline-none focus:border-[#E10600] transition-all"
-                            />
-                        </div>
-                        <div className="flex gap-3 w-full md:w-auto">
-                            <button className="flex-1 md:flex-none px-6 py-4 bg-theme-secondary border border-theme rounded-2xl text-theme-primary text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-theme-secondary/80">
-                                <FiFilter /> Lọc
-                            </button>
-                            <div className="px-6 py-4 bg-[#E10600]/5 text-[#E10600] rounded-2xl text-xs font-black uppercase tracking-widest hidden md:flex items-center">
-                                {filteredList.length} Kênh
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Data List (Modern Table) */}
-                    <div className="bg-theme-card rounded-[40px] border border-theme shadow-sm overflow-hidden">
+                {activeTab === 'marketplace' ? (
+                    /* Marketplace Table */
+                    <div className="bg-theme-card rounded-[40px] border border-theme shadow-sm overflow-hidden animate-in fade-in slide-in-from-left-4 duration-500">
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
                                 <thead className="bg-theme-secondary/30 border-b border-theme">
                                     <tr className="text-theme-muted text-[10px] font-black uppercase tracking-[0.2em]">
                                         <th className="px-8 py-6">Kênh Truyền Thông</th>
-                                        <th className="px-8 py-6">Chỉ số</th>
+                                        <th className="px-8 py-6">Ngành nghề</th>
+                                        <th className="px-8 py-6">Giá & Follow</th>
                                         <th className="px-8 py-6 text-right">Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-theme">
                                     {filteredList.length === 0 ? (
-                                        <tr>
-                                            <td colSpan="3" className="px-8 py-20 text-center">
-                                                <div className="flex flex-col items-center gap-4 opacity-30">
-                                                    <FiGrid size={48} />
-                                                    <p className="text-theme-primary font-black uppercase tracking-widest text-xs">Không tìm thấy dữ liệu</p>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        <tr><td colSpan="4" className="px-8 py-20 text-center opacity-30 font-black uppercase text-xs">Không có dữ liệu</td></tr>
                                     ) : (
                                         [...filteredList].reverse().map((item) => (
                                             <tr key={item.id} className="hover:bg-theme-secondary/10 transition-colors group">
                                                 <td className="px-8 py-6">
                                                     <div className="flex items-center gap-5">
-                                                        <div className="h-16 w-16 rounded-[20px] bg-theme-secondary overflow-hidden border border-theme group-hover:border-[#E10600]/30 transition-all shrink-0">
-                                                            {item.image ? (
-                                                                <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
-                                                            ) : (
-                                                                <div className="h-full w-full flex items-center justify-center text-theme-muted opacity-20">
-                                                                    <FiImage size={24} />
-                                                                </div>
-                                                            )}
+                                                        <div className="h-14 w-14 rounded-2xl bg-theme-secondary overflow-hidden border border-theme shrink-0">
+                                                            {item.image ? <img src={item.image} className="h-full w-full object-cover" /> : <FiImage className="m-auto h-full opacity-10" size={20} />}
                                                         </div>
-                                                        <div className="space-y-1">
-                                                            <div className="flex items-center gap-2">
-                                                                <p className="text-theme-primary font-black text-base uppercase leading-tight tracking-tight">{item.name}</p>
-                                                                <span className="px-2 py-0.5 bg-blue-500/10 text-blue-500 rounded text-[8px] font-black uppercase tracking-tighter">
-                                                                    {item.platform}
-                                                                </span>
-                                                            </div>
-                                                            <span className="inline-block px-3 py-1 bg-theme-secondary text-[#E10600] rounded-full text-[9px] font-black uppercase tracking-widest border border-theme">
-                                                                {item.category}
-                                                            </span>
+                                                        <div>
+                                                            <p className="text-theme-primary font-black text-base uppercase tracking-tight">{item.name}</p>
+                                                            <span className="text-[10px] text-blue-500 font-bold uppercase">{item.platform}</span>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td className="px-8 py-6">
-                                                    <div className="space-y-1">
-                                                        <p className="text-[#E10600] font-black text-2xl tracking-tighter italic whitespace-nowrap">{item.bookingPrice}</p>
-                                                        <div className="flex items-center gap-1.5 text-theme-muted">
-                                                            <FiUsers size={18} className="opacity-50" />
-                                                            <span className="text-lg font-black uppercase tracking-widest">{item.followers}</span>
-                                                        </div>
-                                                    </div>
+                                                    <span className="px-3 py-1 bg-theme-secondary text-[#E10600] rounded-full text-[9px] font-black uppercase border border-theme">
+                                                        {item.category}
+                                                    </span>
+                                                </td>
+                                                <td className="px-8 py-6">
+                                                    <p className="text-[#E10600] font-black text-lg italic">{item.bookingPrice}</p>
+                                                    <p className="text-[10px] text-theme-muted font-black uppercase tracking-widest">{item.followers} Follow</p>
                                                 </td>
                                                 <td className="px-8 py-6 text-right">
-                                                    <div className="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        <a 
-                                                            href={item.link} target="_blank" rel="noopener noreferrer" 
-                                                            className="p-3 bg-theme-secondary text-theme-primary rounded-xl hover:bg-[#E10600] hover:text-white transition-all shadow-sm"
-                                                            title="Xem trực tiếp"
-                                                        >
-                                                            <FiExternalLink size={16} />
-                                                        </a>
-                                                        <button 
-                                                            onClick={() => handleEdit(item)}
-                                                            className="p-3 bg-theme-secondary text-theme-primary rounded-xl hover:bg-amber-500 hover:text-white transition-all shadow-sm"
-                                                            title="Chỉnh sửa"
-                                                        >
-                                                            <FiEdit2 size={16} />
-                                                        </button>
-                                                        <button 
-                                                            onClick={() => window.confirm('Xóa vĩnh viễn kênh này?') && removeMarketplaceItem(item.id)}
-                                                            className="p-3 bg-theme-secondary text-theme-primary rounded-xl hover:bg-red-600 hover:text-white transition-all shadow-sm"
-                                                            title="Xóa kênh"
-                                                        >
-                                                            <FiTrash2 size={16} />
-                                                        </button>
+                                                    <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        <button onClick={() => handleEdit(item)} className="p-3 bg-theme-secondary text-theme-primary rounded-xl hover:bg-amber-500 hover:text-white transition-all"><FiEdit2 size={16} /></button>
+                                                        <button onClick={() => window.confirm('Xóa kênh này?') && removeMarketplaceItem(item.id)} className="p-3 bg-theme-secondary text-theme-primary rounded-xl hover:bg-red-600 hover:text-white transition-all"><FiTrash2 size={16} /></button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -417,8 +252,130 @@ const AdminPage = () => {
                             </table>
                         </div>
                     </div>
-                </div>
+                ) : (
+                    /* Analytics & Revenue Table */
+                    <div className="bg-theme-card rounded-[40px] border border-theme shadow-sm overflow-hidden animate-in fade-in slide-in-from-right-4 duration-500">
+                        <div className="p-6 bg-blue-500/5 border-b border-theme flex items-center gap-3">
+                            <FiActivity className="text-blue-500" />
+                            <p className="text-[10px] text-blue-500 font-black uppercase tracking-widest">Dữ liệu được cập nhật tự động theo thời gian thực từ tương tác người dùng</p>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left">
+                                <thead className="bg-theme-secondary/30 border-b border-theme">
+                                    <tr className="text-theme-muted text-[10px] font-black uppercase tracking-[0.2em]">
+                                        <th className="px-8 py-6">Kênh</th>
+                                        <th className="px-8 py-6">Lượt truy cập</th>
+                                        <th className="px-8 py-6">Số Bookings</th>
+                                        <th className="px-8 py-6">Doanh thu</th>
+                                        <th className="px-8 py-6 text-right">Tình trạng</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-theme">
+                                    {filteredList.map((item) => (
+                                        <tr key={item.id} className="hover:bg-theme-secondary/10 transition-colors group">
+                                            <td className="px-8 py-6">
+                                                <p className="text-theme-primary font-black text-sm uppercase">{item.name}</p>
+                                            </td>
+                                            <td className="px-8 py-6">
+                                                <div className="flex items-center gap-2">
+                                                    <FiActivity className="text-blue-500" />
+                                                    <span className="font-black text-lg">{(item.views || 0).toLocaleString()}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-8 py-6">
+                                                <div className="flex items-center gap-2">
+                                                    <FiZap className="text-purple-500" />
+                                                    <span className="font-black text-lg">{(item.bookings || 0).toLocaleString()}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-8 py-6">
+                                                <div className="flex items-center gap-2">
+                                                    <FiDollarSign className="text-green-500" />
+                                                    <span className="font-black text-lg text-theme-primary">{(item.revenue || 0).toLocaleString('vi-VN')} ₫</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-8 py-6 text-right">
+                                                <span className="px-3 py-1 bg-green-500/10 text-green-500 rounded-full text-[8px] font-black uppercase tracking-widest border border-green-500/20">Đang tracking</span>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
             </div>
+
+            {/* Form Modal */}
+            {isModalOpen && (
+                /* Standard Content Modal (Analytics modal removed) */
+                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" onClick={handleCancel}></div>
+                    <div className="relative bg-theme-card w-full max-w-2xl rounded-[40px] border border-theme shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+                        <div className={`p-6 border-b border-theme flex justify-between items-center ${editingId ? 'bg-amber-500/10' : 'bg-[#E10600]'}`}>
+                            <h2 className="font-black text-lg uppercase text-white flex items-center gap-3">
+                                {editingId ? <FiEdit2 /> : <FiPlus />} {editingId ? 'Chỉnh sửa thông tin' : 'Thêm kênh mới'}
+                            </h2>
+                            <button onClick={handleCancel} className="text-white/50 hover:text-white"><FiX size={24} /></button>
+                        </div>
+                        <form onSubmit={handleSubmit} className="p-8 space-y-5 max-h-[80vh] overflow-y-auto">
+                            <div className="grid md:grid-cols-2 gap-5">
+                                <div className="md:col-span-2">
+                                    <label className="block text-theme-muted text-[10px] font-black uppercase mb-2">Tên kênh *</label>
+                                    <input type="text" name="name" value={formData.name} onChange={handleChange} required className="w-full bg-theme-secondary border border-theme rounded-2xl px-5 py-4 text-sm font-bold text-theme-primary outline-none focus:border-[#E10600]" />
+                                </div>
+                                <div>
+                                    <label className="block text-theme-muted text-[10px] font-black uppercase mb-2">Ngành nghề</label>
+                                    <div className="flex gap-2">
+                                        <select name="category" value={formData.category} onChange={handleChange} className="flex-1 bg-theme-secondary border border-theme rounded-2xl px-4 py-4 text-xs font-bold text-theme-primary outline-none focus:border-[#E10600]">
+                                            {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-theme-muted text-[10px] font-black uppercase mb-2">Nền tảng</label>
+                                    <select name="platform" value={formData.platform} onChange={handleChange} className="w-full bg-theme-secondary border border-theme rounded-2xl px-4 py-4 text-xs font-bold text-theme-primary outline-none focus:border-[#E10600]">
+                                        <option value="Facebook">Facebook</option>
+                                        <option value="TikTok">TikTok</option>
+                                        <option value="Instagram">Instagram</option>
+                                        <option value="YouTube">YouTube</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-theme-muted text-[10px] font-black uppercase mb-2">Followers</label>
+                                    <input type="text" name="followers" value={formData.followers} onChange={handleChange} placeholder="1.7M" className="w-full bg-theme-secondary border border-theme rounded-2xl px-5 py-4 text-sm font-bold text-theme-primary outline-none focus:border-[#E10600]" />
+                                </div>
+                                <div>
+                                    <label className="block text-theme-muted text-[10px] font-black uppercase mb-2">Giá niêm yết (VNĐ) *</label>
+                                    <input type="number" name="price" value={formData.price} onChange={handleChange} required className="w-full bg-theme-secondary border border-theme rounded-2xl px-5 py-4 text-sm font-bold text-theme-primary outline-none focus:border-[#E10600]" />
+                                </div>
+                                <div className="md:col-span-2">
+                                    <label className="block text-theme-muted text-[10px] font-black uppercase mb-2">Link liên kết *</label>
+                                    <input type="url" name="link" value={formData.link} onChange={handleChange} required className="w-full bg-theme-secondary border border-theme rounded-2xl px-5 py-4 text-sm font-bold text-theme-primary outline-none focus:border-[#E10600]" />
+                                </div>
+                                <div className="md:col-span-2">
+                                    <label className="block text-theme-muted text-[10px] font-black uppercase mb-2">Mô tả</label>
+                                    <textarea name="description" value={formData.description} onChange={handleChange} rows="2" className="w-full bg-theme-secondary border border-theme rounded-2xl px-5 py-4 text-sm font-bold text-theme-primary outline-none focus:border-[#E10600] resize-none"></textarea>
+                                </div>
+                                <div className="md:col-span-2">
+                                    <label className="block text-theme-muted text-[10px] font-black uppercase mb-2">Ảnh đại diện</label>
+                                    <div className="flex gap-4">
+                                        <div onClick={() => document.getElementById('img-up').click()} className="w-20 h-20 rounded-2xl bg-theme-secondary border-2 border-dashed border-theme flex items-center justify-center cursor-pointer hover:border-[#E10600] overflow-hidden bg-cover bg-center" style={formData.image ? {backgroundImage: `url(${formData.image})`} : {}}>
+                                            {!formData.image && <FiImage className="opacity-20" size={24} />}
+                                        </div>
+                                        <input id="img-up" type="file" className="hidden" onChange={handleFileChange} />
+                                        <input type="text" name="image" value={formData.image} onChange={handleChange} placeholder="Hoặc dán URL ảnh..." className="flex-1 bg-theme-secondary border border-theme rounded-2xl px-5 py-4 text-xs font-bold text-theme-primary outline-none focus:border-[#E10600]" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex gap-3 pt-4">
+                                <button type="button" onClick={handleCancel} className="flex-1 py-4 bg-theme-secondary text-theme-primary font-black rounded-2xl text-[10px] uppercase border border-theme">Hủy</button>
+                                <button type="submit" className="flex-[2] py-4 bg-[#E10600] text-white font-black rounded-2xl text-[10px] uppercase shadow-lg shadow-red-600/20">{editingId ? 'Cập nhật' : 'Thêm mới'}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
