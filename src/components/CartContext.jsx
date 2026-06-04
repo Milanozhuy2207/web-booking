@@ -16,20 +16,29 @@ export const CartProvider = ({ children }) => {
         
         // Lắng nghe thay đổi thời gian thực
         const unsubscribe = onValue(marketplaceRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                // Chuyển đối tượng Firebase thành mảng
-                const itemsArray = Object.keys(data).map(key => ({
-                    ...data[key],
-                    id: key // Dùng key của Firebase làm ID
-                }));
-                setMarketplaceData(itemsArray);
-            } else {
-                // Nếu DB trống, khởi tạo bằng dữ liệu mẫu (chỉ chạy lần đầu)
+            try {
+                const data = snapshot.val();
+                if (data) {
+                    // Chuyển đối tượng Firebase thành mảng
+                    const itemsArray = Object.keys(data).map(key => ({
+                        ...data[key],
+                        id: key // Dùng key của Firebase làm ID
+                    }));
+                    setMarketplaceData(itemsArray);
+                } else {
+                    // Nếu DB trống, khởi tạo bằng dữ liệu mẫu (chỉ chạy lần đầu)
+                    setMarketplaceData(groupsData);
+                }
+            } catch (err) {
+                console.error("Error parsing Firebase data:", err);
                 setMarketplaceData(groupsData);
-                // Lưu dữ liệu mẫu lên Firebase nếu muốn
-                // groupsData.forEach(item => push(marketplaceRef, item));
+            } finally {
+                setIsLoading(false);
             }
+        }, (error) => {
+            console.error("Firebase connection error:", error);
+            // Fallback sang dữ liệu mẫu nếu có lỗi kết nối
+            setMarketplaceData(groupsData);
             setIsLoading(false);
         });
 
@@ -175,17 +184,24 @@ export const CartProvider = ({ children }) => {
 
     const parseFollowers = (val) => {
         if (typeof val !== 'string') return 0;
-        const num = parseFloat(val);
-        if (val.includes('M')) return num * 1000000;
-        if (val.includes('K')) return num * 1000;
+        const normalizedVal = val.toUpperCase();
+        const num = parseFloat(normalizedVal);
+        if (isNaN(num)) return 0;
+        if (normalizedVal.includes('M')) return num * 1000000;
+        if (normalizedVal.includes('K')) return num * 1000;
         return num;
     };
 
     const filteredData = useMemo(() => {
         return marketplaceData
             .filter(item => {
-                const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    item.description.toLowerCase().includes(searchTerm.toLowerCase());
+                if (!item) return false;
+                
+                const name = item.name || '';
+                const description = item.description || '';
+                
+                const matchesSearch = name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    description.toLowerCase().includes(searchTerm.toLowerCase());
 
                 const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
 
@@ -197,10 +213,11 @@ export const CartProvider = ({ children }) => {
                 else if (followerRange === '> 1M') matchesFollowers = followers > 1000000;
 
                 // Budget filtering
+                const price = Number(item.price) || 0;
                 let matchesBudget = true;
-                if (budgetRange === '< 2M') matchesBudget = item.price < 2000000;
-                else if (budgetRange === '2M - 5M') matchesBudget = item.price >= 2000000 && item.price <= 5000000;
-                else if (budgetRange === '> 5M') matchesBudget = item.price > 5000000;
+                if (budgetRange === '< 2M') matchesBudget = price < 2000000;
+                else if (budgetRange === '2M - 5M') matchesBudget = price >= 2000000 && price <= 5000000;
+                else if (budgetRange === '> 5M') matchesBudget = price > 5000000;
 
                 return matchesSearch && matchesCategory && matchesFollowers && matchesBudget;
             })

@@ -117,10 +117,12 @@ const AdminPage = () => {
         }
     };
 
-    const filteredList = marketplaceData.filter(item => 
-        item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.category.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredList = marketplaceData.filter(item => {
+        const name = item.name || '';
+        const category = item.category || '';
+        return name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+               category.toLowerCase().includes(searchTerm.toLowerCase());
+    });
 
     const stats = [
         { label: 'Tổng số kênh', value: marketplaceData.length, icon: <FiGlobe className="text-blue-500" /> },
